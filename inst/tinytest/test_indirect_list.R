@@ -97,4 +97,96 @@ ft_all
 save_as_docx("All Indirect Effects" = ft_all,
               path = "All_Indirect_Effects.docx")
 
+
+as_flextable.indirect_list <- function(x,
+                                       add_sig = FALSE,
+                                       pvalue = FALSE,
+                                       se = TRUE,
+                                       var_labels = NULL,
+                                       digits = 3,
+                                       pval_digits = 3,
+                                       pcut = .001,
+                                       ...) {
+    path_names <- set_path_names(x,
+                                 var_labels = var_labels)
+    coef0 <- manymome::indirect_effects_from_list(x,
+                                                  add_sig = add_sig,
+                                                  pvalue = pvalue,
+                                                  se = se)
+    coef0 <- data.frame(Path = path_names,
+                        coef0)
+    has_ci <- "CI.lo" %in% colnames(coef0)
+    std_x <- isTRUE(x$standardized_x)
+    std_y <- isTRUE(x$standardized_y)
+    if (has_ci) {
+        level <- x[[1]]$level
+        level_str <- paste0(formatC(level * 100, digits = 1, format = "f"),
+                            "% CI")
+      } else {
+        level <- NULL
+        level_str <- character(0)
+      }
+    ft <- flextable::flextable(coef0)
+    ft <- flextable::colformat_double(ft,
+                                      j = (colnames(coef0) %in% c("ind", "SE")),
+                                      digits = digits)
+    ft <- flextable::colformat_double(ft,
+                                      j = (colnames(coef0) %in% c("pvalue")),
+                                      digits = pval_digits)
+    ft <- flextable::colformat_double(ft,
+                                      j = (colnames(coef0) %in% c("CI.lo")),
+                                      digits = digits,
+                                      prefix = "[")
+    ft <- flextable::colformat_double(ft,
+                                      j = (colnames(coef0) %in% c("CI.hi")),
+                                      digits = digits,
+                                      prefix = "; ",
+                                      suffix = "]")
+    ft <- flextable::autofit(ft)
+    if (has_ci) {
+        j0 <- which(colnames(coef0) == "CI.lo")
+        ft <- flextable::padding(ft, j = j0, padding.right = 0)
+        ft <- flextable::padding(ft, j = j0 + 1, padding.left = 0)
+        ft <- flextable::align(ft, j = j0 + 1, align = "left")
+        ft <- flextable::align(ft, j = j0 - 1, align = "right")
+        ft <- flextable::merge_at(ft, j = c(j0, j0 + 1), part = "header")
+        ft <- flextable::align(ft, j = j0, align = "center", part = "header")
+      }
+    ft <- flextable::autofit(ft)
+    ft <- flextable::labelizor(ft,
+                               labels = c("CI.lo" = level_str,
+                                          "SE" = "S.E."),
+                               part = "header")
+    ft <- flextable::labelizor(ft,
+                               labels = c("CI.lo" = level_str,
+                                          "SE" = "S.E.",
+                                          "pvalue" = "p-value"),
+                               part = "header")
+    ft <- flextable::labelizor(ft,
+                               labels = c("ind" = "Effect",
+                                          "std" = "Std. Effect"),
+                               part = "header")
+    if (!is.null(var_labels)) {
+        ft <- flextable::labelizor(ft,
+                                  j = 1,
+                                  labels = var_labels)
+      }
+    ft
+  }
+
+tmp1 <- as_flextable.indirect_list(out_boot,
+                                   var_labels = c(x = "IV1",
+                                                 y = "DV1"),
+                                   se = TRUE,
+                                   pvalue = TRUE,
+                                   digits = 4)
+tmp2 <- as_flextable.indirect_list(out_boot)
+tmp3 <- as_flextable.indirect_list(out_noboot)
+
+
+tmp1
+tmp2
+tmp3
+
 }
+
