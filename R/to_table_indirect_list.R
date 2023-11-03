@@ -86,10 +86,10 @@ to_table.indirect_list <- function(object,
       }
     if (has_ci) {
         out$tmp <- ci
+        colnames(out)[which(colnames(out) == "tmp")] <- level_str
       }
     if (has_sig) {
         out$Sig <- sig
       }
-    colnames(out)[which(colnames(out) == "tmp")] <- level_str
     out
   }
