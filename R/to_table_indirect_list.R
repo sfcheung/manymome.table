@@ -1,3 +1,5 @@
+# ON HOLD. The as_flextable approach is better.
+
 #' @title One Line Title
 #'
 #' @description One paragraph description
@@ -28,10 +30,8 @@
 #' \donttest{
 #' }
 #'
-#' @export
 #'
-#' @describeIn topic Description of this function
-#' @order 1
+#' @noRd
 to_table.indirect_list <- function(object,
                                    add_sig = TRUE,
                                    pvalue = FALSE,
