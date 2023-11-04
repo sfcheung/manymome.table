@@ -81,3 +81,48 @@ format_pvalue <- function(pv,
       }
     return(out)
   }
+
+#' @noRd
+
+group_ind_df <- function(object,
+                         ind_list,
+                         group_by_x = FALSE,
+                         group_by_y = FALSE,
+                         y_first = TRUE) {
+
+    vars_x <- unique(sapply(ind_list, function(xx) xx$x))
+    vars_y <- unique(sapply(ind_list, function(xx) xx$y))
+    p_x <- length(vars_x)
+    p_y <- length(vars_y)
+    if (p_x == 1) group_by_x <- FALSE
+    if (p_y == 1) group_by_y <- FALSE
+
+    if (group_by_x && p_x > 1) {
+        object$x <- sapply(ind_list, function(xx) xx$x)
+      }
+    if (group_by_y && p_y > 1) {
+        object$y <- sapply(ind_list, function(xx) xx$y)
+      }
+    if (group_by_x && group_by_y) {
+        if (y_first) {
+            object <- object[order(object$y, object$x), ]
+            object <- flextable::as_grouped_data(object,
+                                                groups = c("y", "x"))
+          } else {
+            object <- object[order(object$x, object$y), ]
+            object <- flextable::as_grouped_data(object,
+                                                 groups = c("x", "y"))
+          }
+      }
+    if (group_by_x && !group_by_y) {
+            object <- object[order(object$x), ]
+            object <- flextable::as_grouped_data(object,
+                                                groups = c("x"))
+      }
+    if (!group_by_x && group_by_y) {
+            object <- object[order(object$y), ]
+            object <- flextable::as_grouped_data(object,
+                                                groups = c("y"))
+      }
+    object
+  }

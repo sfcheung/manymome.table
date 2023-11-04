@@ -71,6 +71,20 @@
 #' of unstandardized effects
 #' even if standardization was done.
 #'
+#' @param group_by_x If `TRUE`, the
+#' default, the rows will be grouped by
+#' x-variables. Default is `TRUE`.
+#'
+#' @param group_by_y If `TRUE`, the
+#' default, the rows will be grouped by
+#' y-variables. Default is `TRUE`.
+#'
+#' @param y_first If grouped by both
+#' x- and y-variables, grouped by
+#' y-variables first if `TRUE`, the
+#' default.
+#' Otherwise, grouped by x-variables.
+#'
 #' @param ... Additional arguments.
 #' Ignored.
 #'
@@ -94,11 +108,13 @@ as_flextable.indirect_list <- function(x,
                                        indirect_raw = TRUE,
                                        indirect_raw_ci = TRUE,
                                        indirect_raw_se = TRUE,
+                                       group_by_x = TRUE,
+                                       group_by_y = TRUE,
+                                       y_first = TRUE,
                                        ...) {
     path_names <- set_path_names(x,
                                  var_labels = var_labels)
     # Use arrow
-
     if (use_arrow) {
         path_names <- gsub(" -> ", " \U2192 ",
                            path_names,
@@ -109,6 +125,13 @@ as_flextable.indirect_list <- function(x,
                                                   add_sig = add_sig,
                                                   pvalue = pvalue,
                                                   se = se)
+    vars_x <- unique(sapply(x, function(xx) xx$x))
+    vars_y <- unique(sapply(x, function(xx) xx$y))
+    p_x <- length(vars_x)
+    p_y <- length(vars_y)
+    if (p_x == 1) group_by_x <- FALSE
+    if (p_y == 1) group_by_y <- FALSE
+
     has_pvalue <- "pvalue" %in% colnames(coef0)
     has_ci <- "CI.lo" %in% colnames(coef0)
     std_x <- isTRUE(x[[1]]$standardized_x)
@@ -125,7 +148,7 @@ as_flextable.indirect_list <- function(x,
 
     if ((std_x || std_y) && indirect_raw) {
         ind_raw <- sapply(x,
-                          function(x) {
+                          function(xx) {
                               xx$indirect_raw
                             })
         if (has_ci && indirect_raw_ci) {
@@ -156,6 +179,13 @@ as_flextable.indirect_list <- function(x,
         p_j <- which(colnames(coef0) %in% "pvalue")
         coef0 <- cbind(coef0[-p_j], coef0[p_j])
       }
+
+    coef0 <- group_ind_df(coef0,
+                          ind_list = x,
+                          group_by_x = group_by_x,
+                          group_by_y = group_by_y,
+                          y_first = y_first)
+
     ft <- flextable::flextable(coef0)
 
     # Format Cells
@@ -197,11 +227,24 @@ as_flextable.indirect_list <- function(x,
       }
 
     # Format Headers
+    if (!is.null(var_labels)) {
+        ft <- flextable::labelizor(ft,
+                                  j = (colnames(coef0) %in% c("x", "y", "Path")),
+                                  labels = var_labels)
+      }
+    ft <- flextable::align(ft,
+                           j = (colnames(coef0) %in% c("x", "y")),
+                           align = "left",
+                           part = "header")
     ft <- flextable::align(ft,
                            j = (colnames(coef0) %in%
                                   c("ind", "std", "SE", "ind_raw", "ind_raw_SE")),
                            align = "center",
                            part = "header")
+    ft <- flextable::labelizor(ft,
+                               labels = c("y" = "Outcome",
+                                          "x" = "Predictor"),
+                               part = "header")
     ft <- flextable::labelizor(ft,
                                labels = c("CI.lo" = level_str,
                                           "SE" = "S.E.",
@@ -218,11 +261,6 @@ as_flextable.indirect_list <- function(x,
                                           "std" = "Std. Effect",
                                           "ind_raw" = "Effect"),
                                part = "header")
-    if (!is.null(var_labels)) {
-        ft <- flextable::labelizor(ft,
-                                  j = 1,
-                                  labels = var_labels)
-      }
     ft <- flextable::autofit(ft)
     ft
   }
