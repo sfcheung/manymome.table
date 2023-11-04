@@ -59,52 +59,6 @@ print(out_boot, se = TRUE, pvalue = TRUE)
 print(out_mc, se = TRUE)
 print(out_mc, se = TRUE, pvalue = TRUE)
 
-# tmp1 <- to_table.indirect_list(out_boot,
-#                               var_labels = c(x = "IV1",
-#                                              y = "DV1"),
-#                               se = TRUE,
-#                               pvalue = TRUE,
-#                               digits = 4)
-# tmp2 <- to_table.indirect_list(out_boot)
-# tmp3 <- to_table.indirect_list(out_noboot)
-
-# tmp1
-# tmp2
-# tmp3
-
-# library(flextable)
-# ft_all <- flextable(tmp1) |>
-#             autofit() |>
-#             align(j = c("95% CI"),
-#                   align = "center") |>
-#             align(j = c("p"),
-#                   align = "right") |>
-#             align(j = c("Effect"),
-#                   align = "right") |>
-#             align(align = "center",
-#                   part = "header")
-# ft_all
-# ft_all <- flextable(tmp2) |>
-#             autofit() |>
-#             align(j = c("95% CI"),
-#                   align = "center") |>
-#             align(j = c("Effect"),
-#                   align = "right") |>
-#             align(align = "center",
-#                   part = "header")
-# ft_all
-# ft_all <- flextable(tmp3) |>
-#             autofit() |>
-#             align(j = c("Effect"),
-#                   align = "right") |>
-#             align(align = "center",
-#                   part = "header")
-# ft_all
-
-# save_as_docx("All Indirect Effects" = ft_all,
-#               path = "All_Indirect_Effects.docx")
-
-
 tmp1 <- as_flextable(out_boot,
                      var_labels = c(x = "IV1",
                                    y = "DV1"),
@@ -119,6 +73,9 @@ tmp1
 tmp2
 tmp3
 tmp4
+
+# save_as_docx("All Indirect Effects" = ft_all,
+#               path = "All_Indirect_Effects.docx")
 
 }
 
