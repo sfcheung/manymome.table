@@ -46,36 +46,19 @@ std_xmy_on_w <- cond_indirect_effects(wlevels = "w",
                                       standardized_y = TRUE)
 std_xmy_on_w
 
-tmp1 <- as_flextable(out_boot,
-                     var_labels = c(x1 = "IV_A",
-                                    x2 = "IV_B",
-                                    y1 = "DV_A",
-                                    y2 = "DV_B"),
+tmp1 <- as_flextable(out_xmy_on_w,
+                     var_labels = c(w = "Moderator"),
                      se = TRUE,
                      pvalue = TRUE,
                      digits = 4)
-tmp2 <- as_flextable(out_boot)
-tmp3 <- as_flextable(out_noboot)
-tmp4 <- as_flextable(stdx_boot, pvalue = TRUE)
-tmp5 <- as_flextable(stdy_boot, pvalue = TRUE)
-tmp6 <- as_flextable(std_boot, pvalue = TRUE)
-tmp7 <- as_flextable(x1y2_boot)
-tmp8 <- as_flextable(y2_boot)
-tmp9 <- as_flextable(x2_boot)
-tmp10 <- as_flextable(x2_boot, total_indirect = FALSE)
-tmp11 <- as_flextable(x2_boot, footnote = FALSE)
+tmp2 <- as_flextable(out_xmy_on_w)
+tmp3 <- as_flextable(std_xmy_on_w)
+tmp4 <- as_flextable(std_xmy_on_w, indirect_raw = FALSE)
 
 tmp1
 tmp2
 tmp3
 tmp4
-tmp5
-tmp6
-tmp7
-tmp8
-tmp9
-tmp10
-tmp11
 
 }
 

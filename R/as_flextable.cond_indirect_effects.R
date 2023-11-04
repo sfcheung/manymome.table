@@ -153,87 +153,44 @@ as_flextable.cond_indirect_effects <- function(x,
                                        total_indirect = TRUE,
                                        footnote = TRUE,
                                        ...) {
+    # Adapted from the print method from manymome.
     full_output <- attr(x, "full_output")
     x_i <- full_output[[1]]
     my_call <- attr(x, "call")
     cc_call <- x_i$cond_indirect_call
-    boot_ci <- !is.null(x_i$boot_ci)
-    has_ci <- FALSE
-    ci_type <- NULL
-    if (!is.null(x_i$boot_ci)) {
-        has_ci <- TRUE
-        ci_type <- "boot"
-        ind_name <- "boot_indirect"
-        se_name <- "boot_se"
-      }
-    if (!is.null(x_i$mc_ci)) {
-        has_ci <- TRUE
-        ci_type <- "mc"
-        ind_name <- "mc_indirect"
-        se_name <- "mc_se"
-      }
-    standardized_x <- x_i$standardized_x
-    standardized_y <- x_i$standardized_y
-    level <- x_i$level
-    has_m <- isTRUE(!is.null(x_i$m))
-    R <- ifelse(has_ci, length(x_i[[ind_name]]),
-                        NA)
-    x0 <- attr(x, "x")
-    y0 <- attr(x, "y")
-    m0 <- attr(x, "m")
-    if (has_m) {
-        path <- path <- paste0(x0, " -> ",
-                              paste0(eval(m0), collapse = " -> "),
-                              " -> ", y0)
-      } else {
-        path <- paste(x0, "->", y0)
-      }
+
     x_list <- list2indirect_list(full_output)
     coef0 <- manymome::indirect_effects_from_list(x_list,
                                                   add_sig = add_sig,
                                                   pvalue = pvalue,
                                                   se = se)
+    x0 <- x_i$x
+    m0 <- x_i$m
+    y0 <- x_i$y
+    has_m <- !is.null(m0)
+    if (has_m) {
+        path_names <- paste0(x0, " -> ",
+                              paste0(eval(m0), collapse = " -> "),
+                              " -> ", y0)
+      } else {
+        path_names <- paste(x0, "->", y0)
+      }
 
     # Use arrow
     if (use_arrow) {
-        path <- gsub(" -> ", " \U2192 ",
-                     path,
-                     fixed = TRUE)
+        path_names <- gsub(" -> ", " \U2192 ",
+                           path_names,
+                           fixed = TRUE)
       }
-
-    coef0 <- manymome::indirect_effects_from_list(x,
-                                                  add_sig = add_sig,
-                                                  pvalue = pvalue,
-                                                  se = se)
-    vars_x <- unique(sapply(x, function(xx) xx$x))
-    vars_y <- unique(sapply(x, function(xx) xx$y))
-    p_x <- length(vars_x)
-    p_y <- length(vars_y)
-    if (p_x == 1) group_by_x <- FALSE
-    if (p_y == 1) group_by_y <- FALSE
 
     has_pvalue <- "pvalue" %in% colnames(coef0)
     has_ci <- "CI.lo" %in% colnames(coef0)
     has_se <- "SE" %in% colnames(coef0)
-    ci_type <- NULL
-    if (isTRUE(!is.null(x[[1]]$boot_ci))) {
-        ci_type <- "boot"
-        ind_name <- "boot_indirect"
-        ci_name <- "nonparametric bootstrap"
-      }
-    if (isTRUE(!is.null(x[[1]]$mc_ci))) {
-        ci_type <- "mc"
-        ind_name <- "mc_indirect"
-        ci_name <- "Monte Carlo"
-      }
-    R <- ifelse(has_ci,
-                length(x[[1]][[ind_name]]),
-                NA)
-    std_x <- isTRUE(x[[1]]$standardized_x)
-    std_y <- isTRUE(x[[1]]$standardized_y)
+    std_x <- isTRUE(x_i$standardized_x)
+    std_y <- isTRUE(x_i$standardized_y)
 
     if (has_ci) {
-        level <- x[[1]]$level
+        level <- x_i$level
         level_str <- paste0(formatC(level * 100, digits = 1, format = "f"),
                             "% CI")
       } else {
@@ -241,13 +198,30 @@ as_flextable.cond_indirect_effects <- function(x,
         level_str <- character(0)
       }
 
+    boot_ci <- !is.null(x_i$boot_ci)
+    ci_type <- NULL
+    if (!is.null(x_i$boot_ci)) {
+        has_ci <- TRUE
+        ci_type <- "boot"
+        ind_name <- "boot_indirect"
+        se_name <- "boot_se"
+        ci_name <- "nonparametric bootstrap"
+      }
+    if (!is.null(x_i$mc_ci)) {
+        has_ci <- TRUE
+        ci_type <- "mc"
+        ind_name <- "mc_indirect"
+        se_name <- "mc_se"
+        ci_name <- "Monte Carlo"
+      }
+
     if ((std_x || std_y) && indirect_raw) {
-        ind_raw <- sapply(x,
+        ind_raw <- sapply(full_output,
                           function(xx) {
                               xx$indirect_raw
                             })
         if (has_ci && indirect_raw_ci) {
-            ind_raw_ci <- sapply(x,
+            ind_raw_ci <- sapply(full_output,
                             function(xx) {
                                 stats::confint(xx) * xx$scale_y / xx$scale_x
                               })
@@ -256,30 +230,34 @@ as_flextable.cond_indirect_effects <- function(x,
             ind_raw <- cbind(ind_raw, ind_raw_ci)
           }
         if (has_ci && indirect_raw_se && se) {
-            ind_raw_scale <- sapply(x,
+            ind_raw_scale <- sapply(full_output,
                                 function(xx) {
                                     xx$scale_y / xx$scale_x
                                   })
             ind_raw_SE <- coef0$SE * ind_raw_scale
             ind_raw <- cbind(ind_raw, ind_raw_SE = ind_raw_SE)
           }
-        coef0 <- data.frame(Path = path_names,
-                            ind_raw,
+        coef0 <- data.frame(ind_raw,
                             coef0)
       } else {
-        coef0 <- data.frame(Path = path_names,
-                            coef0)
+        coef0 <- data.frame(coef0)
       }
     if (has_pvalue) {
         p_j <- which(colnames(coef0) %in% "pvalue")
         coef0 <- cbind(coef0[-p_j], coef0[p_j])
       }
 
-    coef0 <- group_ind_df(coef0,
-                          ind_list = x,
-                          group_by_x = group_by_x,
-                          group_by_y = group_by_y,
-                          y_first = y_first)
+    # Add columns for w-variables
+    x_df <- as.data.frame(x)
+    est_j <- min(which(colnames(x_df) %in% c("ind", "std", "ind_raw")))
+    w_df <- x_df[, seq_len(est_j - 1)]
+    coef0 <- cbind(w_df, coef0)
+
+    # Where the values for w levels are
+    w_levels_j <- grepl("^\\(", colnames(coef0)) &
+                  grepl("\\)$", colnames(coef0))
+    w_levels_j <- which(w_levels_j)
+    w_levels_j <- w_levels_j[w_levels_j < est_j]
 
     ft <- flextable::flextable(coef0)
 
@@ -288,6 +266,9 @@ as_flextable.cond_indirect_effects <- function(x,
     ft <- flextable::colformat_double(ft,
                                       j = (colnames(coef0) %in%
                                             c("ind", "std", "SE", "ind_raw", "ind_raw_SE")),
+                                      digits = digits)
+    ft <- flextable::colformat_double(ft,
+                                      j = w_levels_j,
                                       digits = digits)
     ft <- flextable::colformat_double(ft,
                                       j = (colnames(coef0) %in% c("pvalue")),
@@ -322,24 +303,24 @@ as_flextable.cond_indirect_effects <- function(x,
       }
 
     # Format Headers
-    if (!is.null(var_labels)) {
-        ft <- flextable::labelizor(ft,
-                                  j = (colnames(coef0) %in% c("x", "y")),
-                                  labels = var_labels)
-      }
-    ft <- flextable::align(ft,
-                           j = (colnames(coef0) %in% c("x", "y")),
-                           align = "left",
-                           part = "header")
+    # if (!is.null(var_labels)) {
+    #     ft <- flextable::labelizor(ft,
+    #                               j = (colnames(coef0) %in% c("x", "y")),
+    #                               labels = var_labels)
+    #   }
+    # ft <- flextable::align(ft,
+    #                        j = (colnames(coef0) %in% c("x", "y")),
+    #                        align = "left",
+    #                        part = "header")
     ft <- flextable::align(ft,
                            j = (colnames(coef0) %in%
                                   c("ind", "std", "SE", "ind_raw", "ind_raw_SE")),
                            align = "center",
                            part = "header")
-    ft <- flextable::labelizor(ft,
-                               labels = c("y" = "Outcome",
-                                          "x" = "Predictor"),
-                               part = "header")
+    # ft <- flextable::labelizor(ft,
+    #                            labels = c("y" = "Outcome",
+    #                                       "x" = "Predictor"),
+    #                            part = "header")
     ft <- flextable::labelizor(ft,
                                labels = c("CI.lo" = level_str,
                                           "ind_raw_CI.lo" = level_str,
@@ -354,11 +335,26 @@ as_flextable.cond_indirect_effects <- function(x,
                                           "std" = "Std. Effect",
                                           "ind_raw" = "Effect"),
                                part = "header")
+    if (!is.null(var_labels)) {
+        var_labels_1 <- paste0("(", var_labels, ")")
+        var_labels_2 <- paste0("[", var_labels, "]")
+        names(var_labels_1) <- paste0("(", names(var_labels), ")")
+        names(var_labels_2) <- paste0("[", names(var_labels), "]")
+        ft <- flextable::labelizor(ft,
+                                  j = seq_len(w_levels_j),
+                                  labels = c(var_labels_1,
+                                             var_labels_2),
+                                  part = "header")
+      }
 
     # Add footer
 
     if (footnote) {
         msg <- "Note:"
+        msg <- c(msg,
+                 paste("[w] is the meaning of a level",
+                       "and (w) is the value of a level",
+                       "of moderator 'w'."))
         if (has_ci) {
             msg <- c(msg,
                      paste("CI is",
@@ -375,10 +371,10 @@ as_flextable.cond_indirect_effects <- function(x,
                            ci_name,
                            "standard error."))
           }
-        if (total_indirect) {
-            msg <- c(msg,
-                     paste("Paths with '..' are total indirect effects"))
-          }
+        # if (total_indirect) {
+        #     msg <- c(msg,
+        #              paste("Paths with '..' are total indirect effects"))
+        #   }
         if (length(msg) > 1) {
             msg <- paste(msg, collapse = " ")
             msg <- paste0(msg, ".")
