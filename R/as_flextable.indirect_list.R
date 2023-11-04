@@ -21,14 +21,15 @@
 #' @param add_sig Whether a column is
 #' added to denote significant effects
 #' based on confidence intervals. Default
-#' is `FALSE`.
+#' is `FALSE`. Not used for now.
 #'
 #' @param pvalue If confidence intervals
 #' are stored, whether asymmetric *p*-values
-#' are reported.
+#' are reported. Default is `FALSE`.
 #'
 #' @param se Whether standard errors
-#' are reported.
+#' are reported if confidence intervals
+#' are stored. Default is `TRUE`.
 #'
 #' @param var_labels A named vectors.
 #' Used to replace variable names by
@@ -64,26 +65,39 @@
 #' @param indirect_raw_ci If `TRUE`, the
 #' default, report the confidence intervals
 #' of unstandardized effects
-#' even if standardization was done.
+#' even if standardization was done
+#' and confidence intervals were stored.
 #'
 #' @param indirect_raw_se If `TRUE`, the
 #' default, report the standard errors
 #' of unstandardized effects
-#' even if standardization was done.
+#' even if standardization was done
+#' and confidence intervals were stored.
 #'
 #' @param group_by_x If `TRUE`, the
 #' default, the rows will be grouped by
-#' x-variables. Default is `TRUE`.
+#' x-variables if the paths have more
+#' than one x-variable.  Default is `TRUE`.
 #'
 #' @param group_by_y If `TRUE`, the
 #' default, the rows will be grouped by
-#' y-variables. Default is `TRUE`.
+#' y-variables if the paths have more than
+#' one y-variable. Default is `TRUE`.
 #'
-#' @param y_first If grouped by both
-#' x- and y-variables, grouped by
+#' @param y_first If group by both
+#' x- and y-variables, group by
 #' y-variables first if `TRUE`, the
 #' default.
-#' Otherwise, grouped by x-variables.
+#' Otherwise, group by x-variables.
+#'
+#' @param total_indirect If `TRUE`, the
+#' default, total indirect effect
+#' will be computed and added to
+#' the output.
+#'
+#' @param footnote If `TRUE`, the
+#' default,
+#' add footnote(s) regarding the results.
 #'
 #' @param ... Additional arguments.
 #' Ignored.
@@ -111,7 +125,15 @@ as_flextable.indirect_list <- function(x,
                                        group_by_x = TRUE,
                                        group_by_y = TRUE,
                                        y_first = TRUE,
+                                       total_indirect = TRUE,
+                                       footnote = TRUE,
                                        ...) {
+    if (total_indirect) {
+        x_total <- all_total_indirect_effects(x)
+        x <- c(x,
+               x_total)
+        class(x) <- c("indirect_list", class(x))
+      }
     path_names <- set_path_names(x,
                                  var_labels = var_labels)
     # Use arrow
@@ -134,6 +156,21 @@ as_flextable.indirect_list <- function(x,
 
     has_pvalue <- "pvalue" %in% colnames(coef0)
     has_ci <- "CI.lo" %in% colnames(coef0)
+    has_se <- "SE" %in% colnames(coef0)
+    ci_type <- NULL
+    if (isTRUE(!is.null(x[[1]]$boot_ci))) {
+        ci_type <- "boot"
+        ind_name <- "boot_indirect"
+        ci_name <- "nonparametric bootstrap"
+      }
+    if (isTRUE(!is.null(x[[1]]$mc_ci))) {
+        ci_type <- "mc"
+        ind_name <- "mc_indirect"
+        ci_name <- "Monte Carlo"
+      }
+    R <- ifelse(has_ci,
+                length(x[[1]][[ind_name]]),
+                NA)
     std_x <- isTRUE(x[[1]]$standardized_x)
     std_y <- isTRUE(x[[1]]$standardized_y)
 
@@ -229,7 +266,7 @@ as_flextable.indirect_list <- function(x,
     # Format Headers
     if (!is.null(var_labels)) {
         ft <- flextable::labelizor(ft,
-                                  j = (colnames(coef0) %in% c("x", "y", "Path")),
+                                  j = (colnames(coef0) %in% c("x", "y")),
                                   labels = var_labels)
       }
     ft <- flextable::align(ft,
@@ -247,20 +284,50 @@ as_flextable.indirect_list <- function(x,
                                part = "header")
     ft <- flextable::labelizor(ft,
                                labels = c("CI.lo" = level_str,
+                                          "ind_raw_CI.lo" = level_str,
                                           "SE" = "S.E.",
                                           "ind_raw_SE" = "S.E."),
                                part = "header")
     ft <- flextable::labelizor(ft,
-                               labels = c("CI.lo" = level_str,
-                                          "ind_raw_CI.lo" = level_str,
-                                          "SE" = "S.E.",
-                                          "pvalue" = "p-value"),
+                               labels = c("pvalue" = "p-value"),
                                part = "header")
     ft <- flextable::labelizor(ft,
                                labels = c("ind" = "Effect",
                                           "std" = "Std. Effect",
                                           "ind_raw" = "Effect"),
                                part = "header")
+
+    # Add footer
+
+    if (footnote) {
+        msg <- "Note:"
+        if (has_ci) {
+            msg <- c(msg,
+                     paste("CI is",
+                           ci_name,
+                           "confidence interval."))
+          }
+        if (has_pvalue) {
+            msg <- c(msg,
+                     paste("The p-value is asymmetric bootstrap p-value."))
+          }
+        if (has_se) {
+            msg <- c(msg,
+                     paste("SE is",
+                           ci_name,
+                           "standard error."))
+          }
+        if (total_indirect) {
+            msg <- c(msg,
+                     paste("Paths with '..' are total indirect effects"))
+          }
+        if (length(msg) > 1) {
+            msg <- paste(msg, collapse = " ")
+            msg <- paste0(msg, ".")
+            ft <- flextable::add_footer_lines(ft, msg)
+          }
+      }
+
     ft <- flextable::autofit(ft)
     ft
   }

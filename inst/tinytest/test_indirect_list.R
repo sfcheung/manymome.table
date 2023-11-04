@@ -1,4 +1,4 @@
-# WIP. Skip.
+# Need to check visually
 if (FALSE) {
 
 library(manymome)
@@ -78,25 +78,6 @@ x2_boot <- many_indirect_effects(paths_x2,
                                    boot_ci = TRUE,
                                    boot_out = fit2boot)
 
-
-# out_mc <- many_indirect_effects(paths,
-#                                 fit = fit,
-#                                 mc_ci = TRUE,
-#                                 boot_out = fit_mc,
-#                                 progress = FALSE)
-
-# std_mc <- many_indirect_effects(paths,
-#                                 fit = fit,
-#                                 mc_ci = TRUE,
-#                                 standardized_x = TRUE,
-#                                 boot_out = fit_mc,
-#                                 progress = FALSE)
-
-print(out_boot, se = TRUE)
-print(out_boot, se = TRUE, pvalue = TRUE)
-# print(out_mc, se = TRUE)
-# print(out_mc, se = TRUE, pvalue = TRUE)
-
 tmp1 <- as_flextable(out_boot,
                      var_labels = c(x1 = "IV_A",
                                     x2 = "IV_B",
@@ -107,14 +88,14 @@ tmp1 <- as_flextable(out_boot,
                      digits = 4)
 tmp2 <- as_flextable(out_boot)
 tmp3 <- as_flextable(out_noboot)
-# tmp4 <- as_flextable(std_mc)
-# tmp5 <- as_flextable(stdx_boot, pvalue = TRUE)
 tmp4 <- as_flextable(stdx_boot, pvalue = TRUE)
 tmp5 <- as_flextable(stdy_boot, pvalue = TRUE)
 tmp6 <- as_flextable(std_boot, pvalue = TRUE)
 tmp7 <- as_flextable(x1y2_boot)
 tmp8 <- as_flextable(y2_boot)
 tmp9 <- as_flextable(x2_boot)
+tmp10 <- as_flextable(x2_boot, total_indirect = FALSE)
+tmp11 <- as_flextable(x2_boot, footnote = FALSE)
 
 tmp1
 tmp2
@@ -125,9 +106,8 @@ tmp6
 tmp7
 tmp8
 tmp9
-
-# save_as_docx("All Indirect Effects" = ft_all,
-#               path = "All_Indirect_Effects.docx")
+tmp10
+tmp11
 
 }
 

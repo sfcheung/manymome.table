@@ -46,6 +46,9 @@ set_path_names_i <- function(object,
     out_x <- gsub_table(object$x, var_labels = var_labels)
     out_m <- gsub_table(object$m, var_labels = var_labels)
     out_y <- gsub_table(object$y, var_labels = var_labels)
+    if (isTRUE(object$is_total)) {
+        out_m <- ".."
+      }
     list(x = out_x,
          m = out_m,
          y = out_y)
@@ -126,3 +129,26 @@ group_ind_df <- function(object,
       }
     object
   }
+
+#' @noRd
+
+all_total_indirect_effects <- function(object) {
+    vars_x <- sapply(object, function(xx) xx$x)
+    vars_y <- sapply(object, function(xx) xx$y)
+    vars_xy <- unique(cbind(vars_x, vars_y))
+    row.names(vars_xy) <- NULL
+    vars_x <- vars_xy[, "vars_x"]
+    vars_y <- vars_xy[, "vars_y"]
+    out <- mapply(manymome::total_indirect_effect,
+                  x = vars_x,
+                  y = vars_y,
+                  MoreArgs = list(object = object),
+                  SIMPLIFY = FALSE)
+    for (i in seq_along(out)) {
+        out[[i]]$is_total <- TRUE
+      }
+    out_names <- paste(vars_x, "-->..-->", vars_y)
+    names(out) <- out_names
+    out
+  }
+
