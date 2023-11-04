@@ -1,3 +1,3 @@
-# manymome.table 0.0.0.9000
+# manymome.table 0.0.0.9001
 
-- Initial commit.
+- Add `as_flextable.indirect_list()` (0.0.0.9001)

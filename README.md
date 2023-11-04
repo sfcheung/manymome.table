@@ -8,7 +8,7 @@
 
 This package is still **experimental**. Please do not install it for now.
 
-(Version 0.0.0.9000, updated on 2023-10-15, [release history](https://sfcheung.github.io/manymome.table/news/index.html))
+(Version 0.0.0.9001, updated on 2023-11-04, [release history](https://sfcheung.github.io/manymome.table/news/index.html))
 
 # manymome.table: Publication-Ready Tables for `manymome` Results
 

@@ -1,6 +1,6 @@
 Package: manymome.table
 Title: Publication-Ready Tables for 'manymome' Results
-Version: 0.0.0.9000
+Version: 0.0.0.9001
 Authors@R:
     c(person(given = "Shu Fai",
            family = "Cheung",
@@ -25,5 +25,5 @@ Suggests:
     tinytest,
     manymome,
     lavaan
-Imports: 
+Imports:
     flextable
