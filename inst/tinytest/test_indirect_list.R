@@ -41,6 +41,14 @@ out_boot <- many_indirect_effects(paths,
                                   boot_ci = TRUE,
                                   boot_out = fit2boot,
                                   progress = FALSE)
+stdx_boot <- many_indirect_effects(paths,
+                                  fit = fit,
+                                  standardized_x = TRUE,
+                                  boot_ci = TRUE,
+                                  boot_out = fit2boot,
+                                  progress = FALSE)
+
+
 out_mc <- many_indirect_effects(paths,
                                 fit = fit,
                                 mc_ci = TRUE,
@@ -68,11 +76,13 @@ tmp1 <- as_flextable(out_boot,
 tmp2 <- as_flextable(out_boot)
 tmp3 <- as_flextable(out_noboot)
 tmp4 <- as_flextable(std_mc)
+tmp5 <- as_flextable(stdx_boot, pvalue = TRUE)
 
 tmp1
 tmp2
 tmp3
 tmp4
+tmp5
 
 # save_as_docx("All Indirect Effects" = ft_all,
 #               path = "All_Indirect_Effects.docx")
