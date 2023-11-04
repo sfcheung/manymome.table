@@ -152,3 +152,10 @@ all_total_indirect_effects <- function(object) {
     out
   }
 
+#' @noRd
+
+list2indirect_list <- function(object) {
+    out <- object
+    class(out) <- c("indirect_list", class(object))
+    out
+  }
