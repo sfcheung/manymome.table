@@ -5,7 +5,7 @@
 #'
 #' @details It converts an `indirect_list`
 #' object,
-#' which is usually crated by
+#' which is usually created by
 #' [manymome::many_indirect_effects()],
 #' to a `flextable` object. The output
 #' can be further modified by functions
@@ -102,10 +102,35 @@
 #' @param ... Additional arguments.
 #' Ignored.
 #'
-#'
 #' @examples
-#' \donttest{
-#' }
+#'
+#' library(manymome)
+#' data(data_med_complicated)
+#' lm_m11 <- lm(m11 ~ x1 + x1 + x2 + c1 + c2, data_med_complicated)
+#' lm_m12 <- lm(m12 ~ m11 + x1 + x2 + c1 + c2, data_med_complicated)
+#' lm_m2 <- lm(m2 ~ x1 + x2 + c1 + c2, data_med_complicated)
+#' lm_y2 <- lm(y2 ~ m11 + m12 + m2 + x1 + x2 + c1 + c2, data_med_complicated)
+#' fit <- lm2list(lm_m11, lm_m12, lm_m2, lm_y2)
+#' # All indirect paths
+#' paths <- all_indirect_paths(fit,
+#'                            x = c("x1", "x2"),
+#'                            y = c("y2"),
+#'                            exclude = c("c1", "c2"))
+#' # Indirect paths from x1 to y2
+#' paths_x1y2 <- all_indirect_paths(fit,
+#'                            x = c("x1"),
+#'                            y = c("y2"),
+#'                            exclude = c("c1", "c2"))
+#' # Indirect effect estimates
+#' ind <- many_indirect_effects(paths,
+#'                              fit = fit)
+#' ind_x1y2 <- many_indirect_effects(paths_x1y2,
+#'                                   fit = fit)
+#' library(flextable)
+#' ind_ft <- as_flextable(ind)
+#' ind_ft
+#' ind_x1y2 <- as_flextable(ind_x1y2)
+#' ind_x1y2
 #'
 #' @export
 #' @importFrom flextable as_flextable
