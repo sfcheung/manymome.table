@@ -102,35 +102,51 @@
 #' Ignored.
 #'
 #' @examples
-#' # TO FIX
 #'
 #' library(manymome)
-#' data(data_med_complicated)
-#' lm_m11 <- lm(m11 ~ x1 + x1 + x2 + c1 + c2, data_med_complicated)
-#' lm_m12 <- lm(m12 ~ m11 + x1 + x2 + c1 + c2, data_med_complicated)
-#' lm_m2 <- lm(m2 ~ x1 + x2 + c1 + c2, data_med_complicated)
-#' lm_y2 <- lm(y2 ~ m11 + m12 + m2 + x1 + x2 + c1 + c2, data_med_complicated)
-#' fit <- lm2list(lm_m11, lm_m12, lm_m2, lm_y2)
-#' # All indirect paths
-#' paths <- all_indirect_paths(fit,
-#'                            x = c("x1", "x2"),
-#'                            y = c("y2"),
-#'                            exclude = c("c1", "c2"))
-#' # Indirect paths from x1 to y2
-#' paths_x1y2 <- all_indirect_paths(fit,
-#'                            x = c("x1"),
-#'                            y = c("y2"),
-#'                            exclude = c("c1", "c2"))
-#' # Indirect effect estimates
-#' ind <- many_indirect_effects(paths,
-#'                              fit = fit)
-#' ind_x1y2 <- many_indirect_effects(paths_x1y2,
-#'                                   fit = fit)
 #' library(flextable)
-#' ind_ft <- as_flextable(ind)
-#' ind_ft
-#' ind_x1y2 <- as_flextable(ind_x1y2)
-#' ind_x1y2
+#'
+#' # List of indirect effects
+#'
+#' dat <- data_med_mod_a
+#' lm_m <- lm(m ~ x*w + c1 + c2, dat)
+#' lm_y <- lm(y ~ m + x + c1 + c2, dat)
+#' fit_lm <- lm2list(lm_m, lm_y)
+#'
+#' # Should set R to 5000 or 10000 in real research
+#' boot_out_lm <- do_boot(fit_lm,
+#'                        R = 100,
+#'                        seed = 54532,
+#'                        parallel = FALSE,
+#'                        progress = FALSE)
+#'
+#' out_xmy_on_w <- cond_indirect_effects(wlevels = "w",
+#'                                       x = "x",
+#'                                       y = "y",
+#'                                       m = "m",
+#'                                       fit = fit_lm,
+#'                                       boot_ci = TRUE,
+#'                                       boot_out = boot_out_lm)
+#'
+#' std_xmy_on_w <- cond_indirect_effects(wlevels = "w",
+#'                                       x = "x",
+#'                                       y = "y",
+#'                                       m = "m",
+#'                                       fit = fit_lm,
+#'                                       boot_ci = TRUE,
+#'                                       boot_out = boot_out_lm,
+#'                                       standardized_x = TRUE,
+#'                                       standardized_y = TRUE)
+#'
+#' ft1 <- as_flextable(out_xmy_on_w,
+#'                     var_labels = c(w = "Moderator"))
+#' ft1
+#'
+#' ft2 <- as_flextable(std_xmy_on_w,
+#'                     var_labels = c(w = "Moderator"),
+#'                     se = FALSE,
+#'                     digits = 2)
+#' ft2
 #'
 #' @export
 #' @importFrom flextable as_flextable
