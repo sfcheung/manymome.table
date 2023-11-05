@@ -113,31 +113,33 @@
 #' library(manymome)
 #'
 #' data(data_med_complicated)
-#' lm_m11 <- lm(m11 ~ x1 + x1 + x2 + c1 + c2, data_med_complicated)
-#' lm_m12 <- lm(m12 ~ m11 + x1 + x2 + c1 + c2, data_med_complicated)
-#' lm_m2 <- lm(m2 ~ x1 + x2 + c1 + c2, data_med_complicated)
-#' lm_y2 <- lm(y2 ~ m11 + m12 + m2 + x1 + x2 + c1 + c2, data_med_complicated)
-#' fit <- lm2list(lm_m11, lm_m12, lm_m2, lm_y2)
+#' lm_m11 <- lm(m11 ~ x1 + x2, data_med_complicated)
+#' lm_m2 <- lm(m2 ~ x1 + x2, data_med_complicated)
+#' lm_y1 <- lm(y1 ~ m11 + m2 + x1 + x2, data_med_complicated)
+#' fit <- lm2list(lm_m11, lm_m2, lm_y1)
+#'
 #' # All indirect paths
 #' paths <- all_indirect_paths(fit,
 #'                            x = c("x1", "x2"),
-#'                            y = c("y2"),
-#'                            exclude = c("c1", "c2"))
-#' # Indirect paths from x1 to y2
-#' paths_x1y2 <- all_indirect_paths(fit,
+#'                            y = c("y1"))
+#'
+#' # Indirect paths from x1 to y1
+#' paths_x1y1 <- all_indirect_paths(fit,
 #'                            x = c("x1"),
-#'                            y = c("y2"),
-#'                            exclude = c("c1", "c2"))
+#'                            y = c("y1"))
+#'
 #' # Indirect effect estimates
 #' ind <- many_indirect_effects(paths,
 #'                              fit = fit)
 #' ft_ind <- as_flextable(ind)
 #' ft_ind
+#' ft_ind <- as_flextable(ind, group_by_x = FALSE)
+#' ft_ind
 #'
-#' ind_x1y2 <- many_indirect_effects(paths_x1y2,
+#' ind_x1y1 <- many_indirect_effects(paths_x1y1,
 #'                                   fit = fit)
-#' ft_ind_x1y2 <- as_flextable(ind_x1y2)
-#' ft_ind_x1y2
+#' ft_ind_x1y1 <- as_flextable(ind_x1y1)
+#' ft_ind_x1y1
 #'
 #' # Should set R to 5000 or 10000 in real research
 #' boot_out_lm <- do_boot(fit,
@@ -145,12 +147,12 @@
 #'                        seed = 54532,
 #'                        parallel = FALSE,
 #'                        progress = FALSE)
-#' ind_x1y2_ci <- many_indirect_effects(paths_x1y2,
+#' ind_x1y1_ci <- many_indirect_effects(paths_x1y1,
 #'                                      fit = fit,
 #'                                      boot_ci = TRUE,
 #'                                      boot_out = boot_out_lm)
-#' ft_ind_x1y2_ci <- as_flextable(ind_x1y2_ci)
-#' ft_ind_x1y2_ci
+#' ft_ind_x1y1_ci <- as_flextable(ind_x1y1_ci)
+#' ft_ind_x1y1_ci
 #'
 #' @export
 #' @importFrom flextable as_flextable
