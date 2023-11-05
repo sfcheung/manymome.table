@@ -6,8 +6,6 @@ library(manymome)
 library(officer)
 library(flextable)
 
-# List of indirect effects
-
 dat <- data_med_mod_a
 lm_m <- lm(m ~ x*w + c1 + c2, dat)
 lm_y <- lm(y ~ m + x + c1 + c2, dat)
