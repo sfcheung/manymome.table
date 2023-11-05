@@ -1,4 +1,59 @@
 url: https://sfcheung.github.io/manymome.table/
+
+destination: docs
+
 template:
   bootstrap: 5
+  bootswatch: journal
+  theme: a11y-light
+  bslib:
+    pkgdown-nav-height: 80px
+    bg: "#EFEFEF"
+    fg: "#000000"
+    primary: "#0CA0DF"
+    link-color: "#0000A0"
+    base_font: {google: "Hind"}
+    heading_font: {google: "Hind"}
+    code_font: {google: "Oxygen Mono"}
+  includes:
+    in_header: <meta name="google-site-verification" content="0VLBmFnW_UJFI-7gXnORPBsWxqZwmzuGpK-TeVRLBjQ" />
 
+navbar:
+  bg: primary
+  structure:
+    left:  [intro, articles, reference, tutorials, news]
+    right: [search, github]
+
+#  components:
+#    articles:
+#      text: Articles
+#      menu:
+#      - text: "<Section Title>"
+#      - text: Title
+#        href: articles/doc1.html
+#      - text: Title
+#        href: articles/doc2.html
+#      - text: -------
+#      - text: "<Section Title>"
+#      - text: Title
+#        href: articles/doc3.html
+#      - text: Title
+#        href: articles/doc4.html
+
+# reference:
+# - title: Section Title
+#   desc:  >
+#     Section description.
+# - contents:
+#   - Rd1
+#   - Rd2
+# - title: Section Title
+#   desc:  >
+#     Section description.
+# - contents:
+#   - Rd3
+#   - Rd4
+# - title: Datasets
+#   desc: Datasets used in examples.
+# - contents:
+#   - has_keyword("datasets")

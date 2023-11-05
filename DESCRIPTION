@@ -1,7 +1,7 @@
 Package: manymome.table
 Title: Publication-Ready Tables for 'manymome' Results
-Version: 0.0.0.9000
-Authors@R: 
+Version: 0.1.0
+Authors@R:
     c(person(given = "Shu Fai",
            family = "Cheung",
            role = c("aut", "cre"),
@@ -14,11 +14,17 @@ Authors@R:
 Description: Converts results from the 'manymome' package,
   presented in Cheung and Cheung (2023)
   <doi:10.3758/s13428-023-02224-z>, to publication-ready
-  table.
+  tables.
 URL: https://sfcheung.github.io/manymome.table/
 BugReports: https://github.com/sfcheung/manymome.table/issues
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
-Suggests: tinytest
+Suggests:
+    tinytest,
+    lavaan,
+    officer
+Imports:
+    manymome,
+    flextable
