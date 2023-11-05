@@ -6,17 +6,15 @@
 \usage{
 \method{as_flextable}{indirect_list}(
   x,
-  add_sig = FALSE,
   pvalue = FALSE,
   se = TRUE,
   var_labels = NULL,
   digits = 3,
   pval_digits = 3,
-  pcut = 0.001,
   use_arrow = TRUE,
   indirect_raw = TRUE,
-  indirect_raw_ci = TRUE,
-  indirect_raw_se = TRUE,
+  indirect_raw_ci = indirect_raw,
+  indirect_raw_se = indirect_raw,
   group_by_x = TRUE,
   group_by_y = TRUE,
   y_first = TRUE,
@@ -30,41 +28,40 @@
 Should be of the class \code{indirect_list}
 from the package \code{manymome}.}
 
-\item{add_sig}{Whether a column is
-added to denote significant effects
-based on confidence intervals. Default
-is \code{FALSE}. Not used for now.}
-
-\item{pvalue}{If confidence intervals
-are stored, whether asymmetric \emph{p}-values
-are reported. Default is \code{FALSE}.}
+\item{pvalue}{If bootstrap confidence
+intervals are stored, whether
+asymmetric \emph{p}-values are reported.
+Default is \code{FALSE}.
+See
+\code{manymome::print.indirect_list()}
+for the computational details.}
 
 \item{se}{Whether standard errors
 are reported if confidence intervals
-are stored. Default is \code{TRUE}.}
+are stored. Default is \code{TRUE}.
+See
+\code{manymome::print.indirect_list()}
+for the computation details.}
 
 \item{var_labels}{A named vectors.
 Used to replace variable names by
-other names. For example,
+other names when generating the
+table. For example,
 \code{c(x = "I.V", y = "D.V.")} replaces
 \code{x} by \code{"I.V"} and \code{y} by \code{"D.V."}
 in the output.}
 
 \item{digits}{The number of digits
-to be displayed for most columns,
-such as indirect effects. Default
-is 3.}
+to be displayed for most numerical
+columns,
+such as effect estimates, standard
+errors, and confidence intervals.
+Default is 3.}
 
 \item{pval_digits}{The number of
 digits to be displayed for the
 \emph{p}-value column, if present. Default
 is 3.}
-
-\item{pcut}{Any \emph{p}-value less than
-\code{pcut} will be displayed as \verb{p<[pcut]},
-\code{"[pcut]"} replaced by the value of
-\code{pcut}. Default is .001. Not used
-for now.}
 
 \item{use_arrow}{If \code{TRUE}, the
 default, use the arrow symbol in
@@ -74,17 +71,21 @@ the paths.}
 default, report unstandardized effects
 even if standardization was done.}
 
-\item{indirect_raw_ci}{If \code{TRUE}, the
-default, report the confidence intervals
+\item{indirect_raw_ci}{If \code{TRUE},
+report the confidence intervals
 of unstandardized effects
 even if standardization was done
-and confidence intervals were stored.}
+and confidence intervals were stored.
+Default to be equal to \code{indirect_raw}.
+NOTE: Not used for now. Always \code{FALSE}.}
 
-\item{indirect_raw_se}{If \code{TRUE}, the
-default, report the standard errors
+\item{indirect_raw_se}{If \code{TRUE},
+report the standard errors
 of unstandardized effects
 even if standardization was done
-and confidence intervals were stored.}
+and confidence intervals were stored.
+Default to be equal to \code{indirect_raw}.
+NOTE: Not used for now. Always \code{FALSE}.}
 
 \item{group_by_x}{If \code{TRUE}, the
 default, the rows will be grouped by
@@ -109,7 +110,8 @@ the output.}
 
 \item{footnote}{If \code{TRUE}, the
 default,
-add footnote(s) regarding the results.}
+add footnote(s) regarding the results
+to the bottom of the table.}
 
 \item{...}{Additional arguments.
 Ignored.}
