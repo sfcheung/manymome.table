@@ -1,7 +1,10 @@
-# Need to check visually
-if (FALSE) {
+if (requireNamespace("officer", quietly = TRUE) &&
+    length(unclass(packageVersion("manymome.table"))[[1]]) == 4) {
 
+library(tinytest)
 library(manymome)
+library(officer)
+library(flextable)
 
 # List of indirect effects
 
@@ -23,7 +26,6 @@ out_xmy_on_w <- cond_indirect_effects(wlevels = "w",
                                       fit = fit_lm,
                                       boot_ci = TRUE,
                                       boot_out = boot_out_lm)
-out_xmy_on_w
 
 out_mome <- index_of_mome(x = "x",
                           y = "y",
@@ -32,7 +34,6 @@ out_mome <- index_of_mome(x = "x",
                           fit = fit_lm,
                           boot_ci = TRUE,
                           boot_out = boot_out_lm)
-out_mome
 
 std_xmy_on_w <- cond_indirect_effects(wlevels = "w",
                                       x = "x",
@@ -43,25 +44,41 @@ std_xmy_on_w <- cond_indirect_effects(wlevels = "w",
                                       boot_out = boot_out_lm,
                                       standardized_x = TRUE,
                                       standardized_y = TRUE)
-std_xmy_on_w
 
 tmp1 <- as_flextable(out_xmy_on_w,
                      var_labels = c(w = "Moderator"),
                      se = TRUE,
                      pvalue = TRUE,
                      digits = 4)
-tmp2 <- as_flextable(out_xmy_on_w)
-tmp3 <- as_flextable(std_xmy_on_w)
-tmp4 <- as_flextable(std_xmy_on_w, indirect_raw = FALSE)
+tmp <- to_html(tmp1)
+expect_equal(ncol_keys(tmp1), 7)
+expect_match(tmp, "[Moderator]")
+expect_match(tmp, "(Moderator)")
+expect_match(tmp, "95.0% CI")
+expect_match(tmp, "S.E.")
+expect_match(tmp, "p-value")
+expect_match(tmp, formatC(coef(out_xmy_on_w)[1], digits = 3, format = "f"))
+expect_match(tmp, formatC(confint(out_xmy_on_w)[2, 2], digits = 3, format = "f"))
 
-tmp1
-tmp2
-tmp3
-tmp4
+tmp1 <- as_flextable(out_xmy_on_w, show_wvalues = FALSE)
+tmp <- to_html(tmp1)
+expect_equal(ncol_keys(tmp1), 5)
+expect_match(tmp, "[w]")
+expect_false(grepl("(w)", tmp, fixed = TRUE))
+
+tmp1 <- as_flextable(std_xmy_on_w)
+tmp <- to_html(tmp1)
+expect_equal(ncol_keys(tmp1), 7)
+expect_match(tmp, "Std. Effect")
+expect_match(tmp, formatC(coef(std_xmy_on_w)[1], digits = 3, format = "f"))
+expect_match(tmp, formatC(coef(out_xmy_on_w)[1], digits = 3, format = "f"))
+
+tmp1 <- as_flextable(std_xmy_on_w, indirect_raw = FALSE)
+tmp <- to_html(tmp1)
+expect_equal(ncol_keys(tmp1), 6)
+expect_false(grepl(formatC(coef(out_xmy_on_w)[1], digits = 3, format = "f"), tmp, fixed = TRUE))
 
 # From the tests of manymome
-
-library(manymome)
 
 dat <- modmed_x1m3w4y1
 n <- nrow(dat)
@@ -89,16 +106,15 @@ out_5 <- cond_indirect_effects(wlevels = out_mm_1, x = "x", y = "y", m = "m3", f
                                boot_ci = TRUE, seed = 87415,
                                parallel = FALSE, progress = FALSE,
                                R = 100)
-fit_boot_out <- lm2boot_out(fit, R = 100, seed = 87415, progress = FALSE)
 out_6 <- cond_indirect_effects(wlevels = out_mm_1, x = "x", y = "y", m = "m3", fit = fit,
                                standardized_x = TRUE,
-                               boot_ci = TRUE, boot_out = fit_boot_out)
+                               boot_ci = TRUE, boot_out = out_5)
 out_7 <- cond_indirect_effects(wlevels = out_mm_1, x = "x", y = "y", m = "m3", fit = fit,
                                standardized_y = TRUE,
-                               boot_ci = TRUE, boot_out = fit_boot_out)
+                               boot_ci = TRUE, boot_out = out_5)
 out_8 <- cond_indirect_effects(wlevels = out_mm_1, x = "x", y = "y", m = "m3", fit = fit,
                                standardized_x = TRUE, standardized_y = TRUE,
-                               boot_ci = TRUE, boot_out = fit_boot_out)
+                               boot_ci = TRUE, boot_out = out_5)
 
 # Moderation only
 
@@ -116,58 +132,112 @@ outmo_5 <- cond_indirect_effects(wlevels = outmo_mm_1, x = "x", y = "m3", fit = 
                                boot_ci = TRUE, seed = 87415,
                                parallel = FALSE, progress = FALSE,
                                R = 100)
-# fit_boot_out <- lm2boot_out(fit, R = 100, seed = 87415)
 outmo_6 <- cond_indirect_effects(wlevels = outmo_mm_1, x = "x", y = "m3", fit = fit,
                                standardized_x = TRUE,
-                               boot_ci = TRUE, boot_out = fit_boot_out)
+                               boot_ci = TRUE, boot_out = outmo_5)
 outmo_7 <- cond_indirect_effects(wlevels = outmo_mm_1, x = "x", y = "m3", fit = fit,
                                standardized_y = TRUE,
-                               boot_ci = TRUE, boot_out = fit_boot_out)
+                               boot_ci = TRUE, boot_out = outmo_5)
 outmo_8 <- cond_indirect_effects(wlevels = outmo_mm_1, x = "x", y = "m3", fit = fit,
                                standardized_x = TRUE, standardized_y = TRUE,
-                               boot_ci = TRUE, boot_out = fit_boot_out)
+                               boot_ci = TRUE, boot_out = outmo_5)
 
-ft_1 <- as_flextable(out_1)
-ft_2 <- as_flextable(out_2)
-ft_3 <- as_flextable(out_3)
-ft_4 <- as_flextable(out_4)
-ft_5 <- as_flextable(out_5)
-ft_6 <- as_flextable(out_6)
-ft_7 <- as_flextable(out_7)
-ft_7b <- as_flextable(out_7, pvalue = TRUE)
-ft_8 <- as_flextable(out_8)
-ft_8b <- as_flextable(out_8, show_indicators = TRUE)
-ft_8c <- as_flextable(out_8, show_wvalues = FALSE)
+tmp1 <- as_flextable(out_1)
+tmp <- to_html(tmp1)
+expect_equal(ncol_keys(tmp1), 4)
+expect_match(tmp, "[gp]")
+expect_match(tmp, "[gp2]")
+expect_match(tmp, "(w4)")
+expect_false(grepl("gpgp2", tmp, fixed = TRUE))
 
-ft_1
-ft_2
-ft_3
-ft_4
-ft_5
-ft_6
-ft_7
-ft_7b
-ft_8
-ft_8b
-ft_8c
+tmp1 <- as_flextable(out_2)
+tmp <- to_html(tmp1)
+expect_equal(ncol_keys(tmp1), 5)
+expect_match(tmp, "Std. Effect")
 
-ftmo_1 <- as_flextable(outmo_1, footnote = FALSE)
-ftmo_2 <- as_flextable(outmo_2)
-ftmo_3 <- as_flextable(outmo_3)
-ftmo_4 <- as_flextable(outmo_4)
-ftmo_5 <- as_flextable(outmo_5)
-ftmo_6 <- as_flextable(outmo_6)
-ftmo_7 <- as_flextable(outmo_7)
-ftmo_8 <- as_flextable(outmo_8)
+tmp1 <- as_flextable(out_3)
+tmp <- to_html(tmp1)
+expect_match(tmp, formatC(coef(out_3)[1], digits = 3, format = "f"))
+expect_match(tmp, formatC(coef(out_1)[3], digits = 3, format = "f"))
 
-ftmo_1
-ftmo_2
-ftmo_3
-ftmo_4
-ftmo_5
-ftmo_6
-ftmo_7
-ftmo_8
+tmp1 <- as_flextable(out_4)
+tmp <- to_html(tmp1)
+expect_match(tmp, formatC(coef(out_4)[1], digits = 3, format = "f"))
+expect_match(tmp, formatC(coef(out_1)[3], digits = 3, format = "f"))
+
+tmp1 <- as_flextable(out_5, show_indicators = TRUE)
+tmp <- to_html(tmp1)
+expect_match(tmp, "[gpgp3]")
+expect_match(tmp, formatC(confint(out_5)[3, 2], digits = 3, format = "f"))
+
+tmp1 <- as_flextable(out_6, show_wvalues = FALSE)
+tmp <- to_html(tmp1)
+expect_match(tmp, formatC(confint(out_6)[3, 2], digits = 3, format = "f"))
+expect_false(grepl(formatC(confint(out_5)[1, 1], digits = 3, format = "f"), tmp, fixed = TRUE))
+
+tmp1 <- as_flextable(out_7, show_wvalues = FALSE, digits = 4)
+tmp <- to_html(tmp1)
+expect_match(tmp, formatC(confint(out_7)[3, 2], digits = 4, format = "f"))
+expect_match(tmp, formatC(coef(out_5)[2], digits = 4, format = "f"))
+expect_false(grepl("(w4)", tmp, fixed = TRUE))
+
+tmp1 <- as_flextable(out_8, show_wvalues = FALSE, digits = 4, pvalue = TRUE, pval_digits = 5)
+tmp <- to_html(tmp1)
+expect_match(tmp, formatC(confint(out_8)[3, 2], digits = 4, format = "f"))
+tmp2 <- attr(out_8, "full_output")
+class(tmp2) <- c("indirect_list", class(tmp2))
+tmp3 <- indirect_effects_from_list(tmp2, pvalue = TRUE)
+expect_match(tmp, formatC(tmp3$pvalue[3], digits = 5, format = "f"))
+
+
+tmp1 <- as_flextable(outmo_1, digits = 4)
+tmp <- to_html(tmp1)
+expect_equal(ncol_keys(tmp1), 2)
+expect_match(tmp, "[gp]")
+expect_false(grepl("gpgp2", tmp, fixed = TRUE))
+expect_match(tmp, formatC(coef(outmo_1)[1], digits = 4, format = "f"))
+
+tmp1 <- as_flextable(outmo_2)
+tmp <- to_html(tmp1)
+expect_equal(ncol_keys(tmp1), 3)
+expect_match(tmp, "Std. Effect")
+expect_match(tmp, formatC(coef(outmo_2)[1], digits = 3, format = "f"))
+expect_match(tmp, formatC(coef(outmo_1)[3], digits = 3, format = "f"))
+
+tmp1 <- as_flextable(outmo_3)
+tmp <- to_html(tmp1)
+expect_match(tmp, formatC(coef(outmo_3)[1], digits = 3, format = "f"))
+expect_match(tmp, formatC(coef(outmo_1)[3], digits = 3, format = "f"))
+
+tmp1 <- as_flextable(outmo_4)
+tmp <- to_html(tmp1)
+expect_match(tmp, formatC(coef(outmo_4)[1], digits = 3, format = "f"))
+expect_match(tmp, formatC(coef(outmo_1)[3], digits = 3, format = "f"))
+
+tmp1 <- as_flextable(outmo_5, show_indicators = TRUE)
+tmp <- to_html(tmp1)
+expect_match(tmp, "[gpgp3]")
+expect_match(tmp, formatC(confint(outmo_5)[3, 2], digits = 3, format = "f"))
+
+tmp1 <- as_flextable(outmo_6, show_wvalues = FALSE, se = FALSE)
+tmp <- to_html(tmp1)
+expect_match(tmp, formatC(confint(outmo_6)[3, 2], digits = 3, format = "f"))
+expect_false(grepl("S.E.", tmp))
+
+tmp1 <- as_flextable(outmo_7, show_wvalues = FALSE, digits = 4, se = FALSE, pvalue = TRUE)
+tmp <- to_html(tmp1)
+expect_match(tmp, formatC(confint(outmo_7)[3, 2], digits = 4, format = "f"))
+expect_match(tmp, formatC(coef(outmo_5)[2], digits = 4, format = "f"))
+expect_match(tmp, "p-value")
+
+tmp1 <- as_flextable(outmo_8, show_wvalues = FALSE, digits = 2, pvalue = TRUE, footnote = FALSE, show_path = FALSE)
+tmp <- to_html(tmp1)
+expect_match(tmp, formatC(confint(outmo_8)[3, 2], digits = 2, format = "f"))
+expect_false(grepl("Path", tmp))
+expect_false(grepl("Note:", tmp))
+tmp2 <- attr(outmo_8, "full_output")
+class(tmp2) <- c("indirect_list", class(tmp2))
+tmp3 <- indirect_effects_from_list(tmp2, pvalue = TRUE)
+expect_match(tmp, formatC(tmp3$pvalue[3], digits = 3, format = "f"))
 
 }
-
