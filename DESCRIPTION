@@ -23,7 +23,8 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Suggests:
     tinytest,
-    manymome,
-    lavaan
+    lavaan,
+    officer
 Imports:
+    manymome,
     flextable
