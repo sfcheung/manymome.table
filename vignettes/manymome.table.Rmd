@@ -1,0 +1,207 @@
+---
+title: "manymome.table"
+author: "Shu Fai Cheung & Sing-Hang Cheung"
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_vignette:
+    number_sections: true
+vignette: >
+  %\VignetteIndexEntry{manymome.table}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = ""
+)
+```
+
+# Introduction
+
+This article is a brief illustration of how convert
+some results
+from the package
+[manymome](https://sfcheung.github.io/manymome/index.html)
+([Cheung & Cheung, 2023](https://doi.org/10.3758/s13428-023-02224-z))
+to publication-ready tables using the functions
+from [manymome.table](https://sfcheung.github.io/manymome.table/index.html).
+It assumes readers
+have used `manymome`. This guide will focus on converting
+the results using the `as_flextable()` method.
+
+# Several Indirect Effects
+
+The example from [this article](https://sfcheung.github.io/manymome/articles/manymome.html)
+will be used, with some modifications.
+
+This is the sample data set from `manymome`:
+
+```{r dataset_me}
+library(manymome)
+dat <- data_serial
+print(head(dat), digits = 3)
+```
+
+Th following model is fitted in `lavaan`:
+
+```{r}
+library(lavaan)
+mod_med <- "
+m1 ~ x
+m2 ~ m1 + x
+y ~ m2 + m1 + x
+"
+fit_med <- sem(model = mod_med,
+               data = dat,
+               fixed.x = TRUE)
+```
+
+Use `all_indirect_paths()` to identify all indirect paths:
+
+```{r}
+all_paths <- all_indirect_paths(fit = fit_med,
+                                x = "x",
+                                y = "y")
+all_paths
+```
+
+Estimate the indirect effects:
+
+```{r}
+out_all <- many_indirect_effects(paths = all_paths,
+                                 fit = fit_med,
+                                 standardized_x = TRUE,
+                                 standardized_y = TRUE)
+out_all
+```
+
+The method `as_flextable()` can then be used
+to convert the output to a flextable. To use
+this method, we need to load the package
+`manymome.table` first. Because the
+method is from the `flextable` package,
+it also needs to be loaded:
+
+```{r}
+library(manymome.table)
+library(flextable)
+ft_all <- as_flextable(out_all)
+ft_all
+```
+
+By default, if standardized effects are requested,
+the unstandardized effects will also be printed
+when converting to a flextable.
+
+Not demonstrated here due to speed concern,
+it also supports output with confidence intervals.
+
+See `help(as_flextable.indirect_list)` for more information
+on the options available in the conversion.
+
+# Conditional Indirect Effects
+
+The example from [this article](https://sfcheung.github.io/manymome/articles/manymome.html)
+will be used, with some modifications.
+
+This is the sample data set from `manymome:
+
+```{r dataset}
+dat <- data_med_mod_ab
+print(head(dat), digits = 3)
+```
+
+For illustration, OLS regression is used
+instead of structural equation modeling
+to fit the model:
+
+```{r}
+m ~ x + w1 + w1x + c1 + c2
+y ~ m + w2 + w2m + x + c1 + c2
+lm_m <- lm(m ~ x*w1, dat)
+lm_y <- lm(y ~ m*w2 + x, dat)
+lm_out <- lm2list(lm_m, lm_y)
+```
+
+Compute conditional indirect effects:
+
+```{r cond_indirect}
+out_cond <- cond_indirect_effects(wlevels =c("w1", "w2"),
+                                  x = "x",
+                                  y = "y",
+                                  m = "m",
+                                  fit = lm_out,
+                                  standardized_x = TRUE,
+                                  standardized_y = TRUE)
+out_cond
+```
+
+The method `as_flextable()` can then be used
+to convert the output to a flextable. Again, to use
+this method, we need to load the package
+`manymome.table` and `flextable`, if they are not
+yet loaded:
+
+```{r}
+library(manymome.table)
+library(flextable)
+ft_cond <- as_flextable(out_cond)
+ft_cond
+```
+
+By default, if standardized effects are requested,
+the unstandardized effects will also be printed
+when converting to a flextable.
+
+Not demonstrated here due to speed concern,
+it also supports output with confidence intervals.
+
+See `help(as_flextable.cond_indirect_effects)` for more information
+on the options available in the conversion.
+
+# Other Features
+
+## Further Processing by `flextable`
+
+The output of both methods is a flextable
+object. Therefore, it can be further
+modified by functions for flextable.
+Load the package `flextable` first to
+use its function.
+
+For example:
+
+```{r}
+library(flextable)
+ft_cond2 <- ft_cond |>
+              bold(part = "header") |>
+              bg(i = c(1, 2), bg = "lightblue", part = "body") |>
+              bg(i = c(3, 4), bg = "lightgreen", part = "body")
+ft_cond2
+```
+
+The export functions from `flextable`
+can also be used to export one or more
+tables to an external file, such as
+a Word file:
+
+```r
+save_as_docx(ft_cond, "conditional_effects.docx")
+```
+
+Please refer to the documentation of
+`flextable` for further information.
+
+## Other Options
+
+Both `as_flextable.indirect_list()` and
+`as_flextable.cond_indirect_effects()` have
+options for customize the generation of the
+table. For example, if the list of indirect
+paths have different predictors (x-variables)
+and/or different outcome variables (y-variables),
+the estimates caN be grouped by x- and/or y-variables.
+Please refer to the help pages for further details.
