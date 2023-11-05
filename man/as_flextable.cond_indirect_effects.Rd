@@ -17,11 +17,10 @@
   indirect_raw = TRUE,
   indirect_raw_ci = TRUE,
   indirect_raw_se = TRUE,
-  group_by_x = TRUE,
-  group_by_y = TRUE,
-  y_first = TRUE,
-  total_indirect = TRUE,
   footnote = TRUE,
+  show_indicators = FALSE,
+  show_wvalues = TRUE,
+  show_path = TRUE,
   ...
 )
 }
@@ -86,30 +85,24 @@ of unstandardized effects
 even if standardization was done
 and confidence intervals were stored.}
 
-\item{group_by_x}{If \code{TRUE}, the
-default, the rows will be grouped by
-x-variables if the paths have more
-than one x-variable.  Default is \code{TRUE}.}
-
-\item{group_by_y}{If \code{TRUE}, the
-default, the rows will be grouped by
-y-variables if the paths have more than
-one y-variable. Default is \code{TRUE}.}
-
-\item{y_first}{If group by both
-x- and y-variables, group by
-y-variables first if \code{TRUE}, the
-default.
-Otherwise, group by x-variables.}
-
-\item{total_indirect}{If \code{TRUE}, the
-default, total indirect effect
-will be computed and added to
-the output.}
-
 \item{footnote}{If \code{TRUE}, the
 default,
 add footnote(s) regarding the results.}
+
+\item{show_indicators}{Whether the values
+of indicators (dummy variables) will
+be shown for categorical moderators.
+Default is \code{FALSE}.}
+
+\item{show_wvalues}{Whether the values
+of moderators will be shown. If \code{FALSE},
+no values will be shown, even for
+categorical moderators. Default is
+\code{TRUE}.}
+
+\item{show_path}{Whether the paths
+being moderated will be displayed.
+Default is \code{TRUE}.}
 
 \item{...}{Additional arguments.
 Ignored.}
@@ -131,6 +124,7 @@ can be further modified by functions
 from the package \code{flextable}.
 }
 \examples{
+# TO FIX
 
 library(manymome)
 data(data_med_complicated)
