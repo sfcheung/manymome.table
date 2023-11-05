@@ -18,41 +18,41 @@
 #' Should be of the class `indirect_list`
 #' from the package `manymome`.
 #'
-#' @param add_sig Whether a column is
-#' added to denote significant effects
-#' based on confidence intervals. Default
-#' is `FALSE`. Not used for now.
 #'
-#' @param pvalue If confidence intervals
-#' are stored, whether asymmetric *p*-values
-#' are reported. Default is `FALSE`.
+#' @param pvalue If bootstrap confidence
+#' intervals are stored, whether
+#' asymmetric *p*-values are reported.
+#' Default is `FALSE`.
+#' See
+#' `manymome::print.indirect_list()`
+#' for the computational details.
 #'
 #' @param se Whether standard errors
 #' are reported if confidence intervals
 #' are stored. Default is `TRUE`.
+#' See
+#' `manymome::print.indirect_list()`
+#' for the computation details.
 #'
 #' @param var_labels A named vectors.
 #' Used to replace variable names by
-#' other names. For example,
+#' other names when generating the
+#' table. For example,
 #' `c(x = "I.V", y = "D.V.")` replaces
 #' `x` by `"I.V"` and `y` by `"D.V."`
 #' in the output.
 #'
 #' @param digits The number of digits
-#' to be displayed for most columns,
-#' such as indirect effects. Default
-#' is 3.
+#' to be displayed for most numerical
+#' columns,
+#' such as effect estimates, standard
+#' errors, and confidence intervals.
+#' Default is 3.
 #'
 #' @param pval_digits The number of
 #' digits to be displayed for the
 #' *p*-value column, if present. Default
 #' is 3.
-#'
-#' @param pcut Any *p*-value less than
-#' `pcut` will be displayed as `p<[pcut]`,
-#' `"[pcut]"` replaced by the value of
-#' `pcut`. Default is .001. Not used
-#' for now.
 #'
 #' @param use_arrow If `TRUE`, the
 #' default, use the arrow symbol in
@@ -62,17 +62,21 @@
 #' default, report unstandardized effects
 #' even if standardization was done.
 #'
-#' @param indirect_raw_ci If `TRUE`, the
-#' default, report the confidence intervals
+#' @param indirect_raw_ci If `TRUE`,
+#' report the confidence intervals
 #' of unstandardized effects
 #' even if standardization was done
 #' and confidence intervals were stored.
+#' Default to be equal to `indirect_raw`.
+#' NOTE: Not used for now. Always `FALSE`.
 #'
-#' @param indirect_raw_se If `TRUE`, the
-#' default, report the standard errors
+#' @param indirect_raw_se If `TRUE`,
+#' report the standard errors
 #' of unstandardized effects
 #' even if standardization was done
 #' and confidence intervals were stored.
+#' Default to be equal to `indirect_raw`.
+#' NOTE: Not used for now. Always `FALSE`.
 #'
 #' @param group_by_x If `TRUE`, the
 #' default, the rows will be grouped by
@@ -97,7 +101,8 @@
 #'
 #' @param footnote If `TRUE`, the
 #' default,
-#' add footnote(s) regarding the results.
+#' add footnote(s) regarding the results
+#' to the bottom of the table.
 #'
 #' @param ... Additional arguments.
 #' Ignored.
@@ -136,23 +141,25 @@
 #' @importFrom flextable as_flextable
 
 as_flextable.indirect_list <- function(x,
-                                       add_sig = FALSE,
                                        pvalue = FALSE,
                                        se = TRUE,
                                        var_labels = NULL,
                                        digits = 3,
                                        pval_digits = 3,
-                                       pcut = .001,
                                        use_arrow = TRUE,
                                        indirect_raw = TRUE,
-                                       indirect_raw_ci = TRUE,
-                                       indirect_raw_se = TRUE,
+                                       indirect_raw_ci = indirect_raw,
+                                       indirect_raw_se = indirect_raw,
                                        group_by_x = TRUE,
                                        group_by_y = TRUE,
                                        y_first = TRUE,
                                        total_indirect = TRUE,
                                        footnote = TRUE,
                                        ...) {
+    # TODO: Remove after an update to manymome
+    indirect_raw_ci <- FALSE
+    indirect_raw_se <- FALSE
+
     if (total_indirect) {
         x_total <- all_total_indirect_effects(x)
         x <- c(x,
@@ -169,7 +176,7 @@ as_flextable.indirect_list <- function(x,
       }
 
     coef0 <- manymome::indirect_effects_from_list(x,
-                                                  add_sig = add_sig,
+                                                  add_sig = FALSE,
                                                   pvalue = pvalue,
                                                   se = se)
     vars_x <- unique(sapply(x, function(xx) xx$x))
@@ -214,6 +221,7 @@ as_flextable.indirect_list <- function(x,
                               xx$indirect_raw
                             })
         if (has_ci && indirect_raw_ci) {
+            # TOFIX: Wait for an update to manymome
             ind_raw_ci <- sapply(x,
                             function(xx) {
                                 stats::confint(xx) * xx$scale_y / xx$scale_x
@@ -223,6 +231,7 @@ as_flextable.indirect_list <- function(x,
             ind_raw <- cbind(ind_raw, ind_raw_ci)
           }
         if (has_ci && indirect_raw_se && se) {
+            # TOFIX: Wait for an update to manymome
             ind_raw_scale <- sapply(x,
                                 function(xx) {
                                     xx$scale_y / xx$scale_x
