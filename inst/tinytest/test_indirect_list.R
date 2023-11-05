@@ -1,8 +1,10 @@
-# Need to check visually
-if (FALSE) {
+if (requireNamespace("officer", quietly = TRUE) &&
+    length(unclass(packageVersion("manymome.table"))[[1]]) == 4) {
 
+library(tinytest)
 library(manymome)
-suppressMessages(library(lavaan))
+library(officer)
+library(flextable)
 
 # List of indirect effects
 
@@ -86,28 +88,66 @@ tmp1 <- as_flextable(out_boot,
                      se = TRUE,
                      pvalue = TRUE,
                      digits = 4)
-tmp2 <- as_flextable(out_boot)
-tmp3 <- as_flextable(out_noboot)
-tmp4 <- as_flextable(stdx_boot, pvalue = TRUE)
-tmp5 <- as_flextable(stdy_boot, pvalue = TRUE)
-tmp6 <- as_flextable(std_boot, pvalue = TRUE)
-tmp7 <- as_flextable(x1y2_boot)
-tmp8 <- as_flextable(y2_boot)
-tmp9 <- as_flextable(x2_boot)
-tmp10 <- as_flextable(x2_boot, total_indirect = FALSE)
-tmp11 <- as_flextable(x2_boot, footnote = FALSE)
+tmp <- to_html(tmp1)
+expect_equal(ncol_keys(tmp1), 8)
+expect_equal(nrow_part(tmp1), 28)
+expect_match(tmp, "Outcome")
+expect_match(tmp, "Predictor")
+expect_match(tmp, "95.0% CI")
+expect_match(tmp, "S.E.")
+expect_match(tmp, "p-value")
+expect_match(tmp, formatC(coef(out_boot)[1], digits = 4, format = "f"))
+expect_match(tmp, formatC(confint(out_boot)[5, 2], digits = 4, format = "f"))
 
-tmp1
-tmp2
-tmp3
-tmp4
-tmp5
-tmp6
-tmp7
-tmp8
-tmp9
-tmp10
-tmp11
+tmp1 <- as_flextable(out_noboot, footnote = FALSE)
+tmp <- to_html(tmp1)
+expect_false(grepl("S.E.", tmp, fixed = TRUE))
+expect_false(grepl("95.0% CI", tmp, fixed = TRUE))
+expect_false(grepl("Note:", tmp, fixed = TRUE))
+
+tmp1 <- as_flextable(stdx_boot, pvalue = TRUE, pvalue_digits = 2, group_by_x = FALSE)
+tmp <- to_html(tmp1)
+expect_match(tmp, "Outcome")
+expect_false(grepl("Predictor", tmp, fixed = TRUE))
+tmp2 <- indirect_effects_from_list(stdx_boot, pvalue = TRUE)
+tmp3 <- formatC(tmp2$pvalue[7], digits = 2, format = "f")
+expect_match(tmp, tmp3)
+expect_match(tmp, formatC(coef(stdx_boot)[4], digits = 3, format = "f"))
+expect_match(tmp, formatC(coef(out_boot)[5], digits = 3, format = "f"))
+
+tmp1 <- as_flextable(stdy_boot, pvalue = TRUE, pvalue_digits = 2, group_by_y = FALSE)
+tmp <- to_html(tmp1)
+expect_match(tmp, "Predictor")
+expect_false(grepl("Outcome", tmp, fixed = TRUE))
+expect_match(tmp, formatC(coef(stdy_boot)[4], digits = 3, format = "f"))
+expect_match(tmp, formatC(coef(out_boot)[4], digits = 3, format = "f"))
+
+tmp1 <- as_flextable(std_boot, pvalue = TRUE, pvalue_digits = 2, group_by_y = FALSE, group_by_x = FALSE)
+tmp <- to_html(tmp1)
+expect_false(grepl("Predictor", tmp, fixed = TRUE))
+expect_false(grepl("Outcome", tmp, fixed = TRUE))
+expect_match(tmp, formatC(coef(std_boot)[4], digits = 3, format = "f"))
+expect_match(tmp, formatC(coef(out_boot)[4], digits = 3, format = "f"))
+
+tmp1 <- as_flextable(x1y2_boot)
+tmp <- to_html(tmp1)
+expect_false(grepl("Predictor", tmp, fixed = TRUE))
+expect_false(grepl("Outcome", tmp, fixed = TRUE))
+
+tmp1 <- as_flextable(y2_boot)
+tmp <- to_html(tmp1)
+expect_match(tmp, "Predictor")
+expect_false(grepl("Outcome", tmp, fixed = TRUE))
+
+tmp1 <- as_flextable(x2_boot)
+tmp <- to_html(tmp1)
+expect_match(tmp, "Outcome")
+expect_false(grepl("Predictor", tmp, fixed = TRUE))
+
+tmp1 <- as_flextable(x2_boot, total_indirect = FALSE)
+tmp <- to_html(tmp1)
+expect_false(grepl("\\.\\.", tmp, fixed = TRUE))
+expect_false(grepl("total indirect effects", tmp, fixed = TRUE))
 
 }
 

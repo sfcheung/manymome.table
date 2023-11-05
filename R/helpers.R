@@ -152,3 +152,58 @@ all_total_indirect_effects <- function(object) {
     out
   }
 
+#' @noRd
+
+list2indirect_list <- function(object) {
+    out <- object
+    class(out) <- c("indirect_list", class(object))
+    out
+  }
+
+#' @noRd
+
+get_indicators <- function(object) {
+    wlevels <- attr(object, "wlevels")
+    wvars <- attr(wlevels, "wvars")
+    if (is.null(wvars)) {
+        wvars <- list(colnames(wlevels))
+        names(wvars) <- attr(wlevels, "wname")
+      }
+    w_types <- attr(wlevels, "w_types")
+    if (is.null(w_types)) {
+        w_types <- attr(wlevels, "w_type")
+      }
+    p_cat <- w_types %in% "categorical"
+    if (!any(p_cat)) {
+        return(NULL)
+      }
+    wvars_cat <- wvars[p_cat]
+    out <- unlist(wvars_cat, use.names = FALSE)
+    out
+  }
+
+#' @noRd
+
+get_wvars <- function(object) {
+    wlevels <- attr(object, "wlevels")
+    wvars <- c(attr(wlevels, "wvars"))
+    if (is.null(wvars)) {
+        out <- attr(wlevels, "wname")
+      } else {
+        out <- names(wvars)
+      }
+    out
+  }
+
+#' @noRd
+
+get_wvalues <- function(object) {
+    wlevels <- attr(object, "wlevels")
+    wvars <- attr(wlevels, "wvars")
+    if (is.null(wvars)) {
+        out <- colnames(wlevels)
+      } else {
+        out <- unlist(wvars, use.names = FALSE)
+      }
+    out
+  }
