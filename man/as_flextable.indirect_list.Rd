@@ -134,7 +134,9 @@ from the package \code{flextable}.
 }
 \examples{
 
+library(flextable)
 library(manymome)
+
 data(data_med_complicated)
 lm_m11 <- lm(m11 ~ x1 + x1 + x2 + c1 + c2, data_med_complicated)
 lm_m12 <- lm(m12 ~ m11 + x1 + x2 + c1 + c2, data_med_complicated)
@@ -154,12 +156,25 @@ paths_x1y2 <- all_indirect_paths(fit,
 # Indirect effect estimates
 ind <- many_indirect_effects(paths,
                              fit = fit)
+ft_ind <- as_flextable(ind)
+ft_ind
+
 ind_x1y2 <- many_indirect_effects(paths_x1y2,
                                   fit = fit)
-library(flextable)
-ind_ft <- as_flextable(ind)
-ind_ft
-ind_x1y2 <- as_flextable(ind_x1y2)
-ind_x1y2
+ft_ind_x1y2 <- as_flextable(ind_x1y2)
+ft_ind_x1y2
+
+# Should set R to 5000 or 10000 in real research
+boot_out_lm <- do_boot(fit,
+                       R = 100,
+                       seed = 54532,
+                       parallel = FALSE,
+                       progress = FALSE)
+ind_x1y2_ci <- many_indirect_effects(paths_x1y2,
+                                     fit = fit,
+                                     boot_ci = TRUE,
+                                     boot_out = boot_out_lm)
+ft_ind_x1y2_ci <- as_flextable(ind_x1y2_ci)
+ft_ind_x1y2_ci
 
 }
