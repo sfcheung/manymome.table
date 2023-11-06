@@ -46,7 +46,7 @@
 #' columns,
 #' such as effect estimates, standard
 #' errors, and confidence intervals.
-#' Default is 3.
+#' Default is 2.
 #'
 #' @param pval_digits The number of
 #' digits to be displayed for the
@@ -161,7 +161,7 @@ as_flextable.cond_indirect_effects <- function(x,
                                        pvalue = FALSE,
                                        se = TRUE,
                                        var_labels = NULL,
-                                       digits = 3,
+                                       digits = 2,
                                        pval_digits = 3,
                                        use_arrow = TRUE,
                                        indirect_raw = TRUE,
