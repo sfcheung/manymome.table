@@ -51,9 +51,7 @@
 #' @param pval_digits The number of
 #' digits to be displayed for the
 #' *p*-value column, if present. Default
-#' is 3. No longer used. The number of
-#' digits to be displayed determined by
-#' `pcut`.
+#' is 3.
 #'
 #' @param use_arrow If `TRUE`, the
 #' default, use the arrow symbol in
@@ -308,7 +306,7 @@ as_flextable.cond_indirect_effects <- function(x,
     #                                   digits = pval_digits)
     ft <- flextable::set_formatter(ft,
                                    pvalue = function(x) {
-                                           format_p(x, pcut = pcut)
+                                           format_p(x, pcut = pcut, pval_digits = pval_digits)
                                         })
     ft <- flextable::colformat_double(ft,
                                       j = (colnames(coef0) %in% c("CI.lo", "ind_raw_CI.lo")),
