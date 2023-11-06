@@ -1,8 +1,11 @@
-# manymome.table 0.1.3
+# manymome.table 0.1.5
 
 - Simplified the examples of `as_flextable.indirect_list()`. (0.1.1)`
 - Added a vignette. (0.1.2)
 - Fixed some issues with vignette building. (0.1.3)
+- *P*-values are now formatted based on APA style. (0.1.4)
+- Default number of digits after the decimal
+  changed to 2, based on APA style. (0.1.5)
 
 # manymome.table 0.1.0
 

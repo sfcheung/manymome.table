@@ -9,7 +9,7 @@
   pvalue = FALSE,
   se = TRUE,
   var_labels = NULL,
-  digits = 3,
+  digits = 2,
   pval_digits = 3,
   use_arrow = TRUE,
   indirect_raw = TRUE,
@@ -19,6 +19,7 @@
   show_wvalues = TRUE,
   show_indicators = FALSE,
   show_path = TRUE,
+  pcut = 0.001,
   ...
 )
 }
@@ -55,7 +56,7 @@ to be displayed for most numerical
 columns,
 such as effect estimates, standard
 errors, and confidence intervals.
-Default is 3.}
+Default is 2.}
 
 \item{pval_digits}{The number of
 digits to be displayed for the
@@ -105,6 +106,11 @@ Default is \code{FALSE}.}
 \item{show_path}{Whether the paths
 being moderated will be displayed.
 Default is \code{TRUE}.}
+
+\item{pcut}{Any \emph{p}-value less than
+\code{pcut} will be displayed as
+\verb{<[pcut]}, \code{"[pcut]"} replaced by
+the value of \code{pcut}. Default is .001.}
 
 \item{...}{Additional arguments.
 Ignored.}

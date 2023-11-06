@@ -9,7 +9,7 @@
   pvalue = FALSE,
   se = TRUE,
   var_labels = NULL,
-  digits = 3,
+  digits = 2,
   pval_digits = 3,
   use_arrow = TRUE,
   indirect_raw = TRUE,
@@ -20,6 +20,7 @@
   y_first = TRUE,
   total_indirect = TRUE,
   footnote = TRUE,
+  pcut = 0.001,
   ...
 )
 }
@@ -56,7 +57,7 @@ to be displayed for most numerical
 columns,
 such as effect estimates, standard
 errors, and confidence intervals.
-Default is 3.}
+Default is 2.}
 
 \item{pval_digits}{The number of
 digits to be displayed for the
@@ -112,6 +113,11 @@ the output.}
 default,
 add footnote(s) regarding the results
 to the bottom of the table.}
+
+\item{pcut}{Any \emph{p}-value less than
+\code{pcut} will be displayed as
+\verb{<[pcut]}, \code{"[pcut]"} replaced by
+the value of \code{pcut}. Default is .001.}
 
 \item{...}{Additional arguments.
 Ignored.}

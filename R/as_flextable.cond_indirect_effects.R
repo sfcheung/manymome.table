@@ -46,7 +46,7 @@
 #' columns,
 #' such as effect estimates, standard
 #' errors, and confidence intervals.
-#' Default is 3.
+#' Default is 2.
 #'
 #' @param pval_digits The number of
 #' digits to be displayed for the
@@ -97,6 +97,12 @@
 #' @param show_path Whether the paths
 #' being moderated will be displayed.
 #' Default is `TRUE`.
+#'
+#' @param pcut Any *p*-value less than
+#' `pcut` will be displayed as
+#' `<[pcut]`, `"[pcut]"` replaced by
+#' the value of `pcut`. Default is .001.
+#'
 #'
 #' @param ... Additional arguments.
 #' Ignored.
@@ -155,7 +161,7 @@ as_flextable.cond_indirect_effects <- function(x,
                                        pvalue = FALSE,
                                        se = TRUE,
                                        var_labels = NULL,
-                                       digits = 3,
+                                       digits = 2,
                                        pval_digits = 3,
                                        use_arrow = TRUE,
                                        indirect_raw = TRUE,
@@ -165,6 +171,7 @@ as_flextable.cond_indirect_effects <- function(x,
                                        show_wvalues = TRUE,
                                        show_indicators = FALSE,
                                        show_path = TRUE,
+                                       pcut = .001,
                                        ...) {
     # TODO: Remove after an update to manymome
     indirect_raw_ci <- FALSE
@@ -294,9 +301,13 @@ as_flextable.cond_indirect_effects <- function(x,
     ft <- flextable::colformat_double(ft,
                                       j = (colnames(coef0) %in% w_columns),
                                       digits = digits)
-    ft <- flextable::colformat_double(ft,
-                                      j = (colnames(coef0) %in% c("pvalue")),
-                                      digits = pval_digits)
+    # ft <- flextable::colformat_double(ft,
+    #                                   j = (colnames(coef0) %in% c("pvalue")),
+    #                                   digits = pval_digits)
+    ft <- flextable::set_formatter(ft,
+                                   pvalue = function(x) {
+                                           format_p(x, pcut = pcut, pval_digits = pval_digits)
+                                        })
     ft <- flextable::colformat_double(ft,
                                       j = (colnames(coef0) %in% c("CI.lo", "ind_raw_CI.lo")),
                                       digits = digits,
