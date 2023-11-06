@@ -51,7 +51,9 @@
 #' @param pval_digits The number of
 #' digits to be displayed for the
 #' *p*-value column, if present. Default
-#' is 3.
+#' is 3. No longer used. The number of
+#' digits to be displayed determined by
+#' `pcut`.
 #'
 #' @param use_arrow If `TRUE`, the
 #' default, use the arrow symbol in
@@ -97,6 +99,12 @@
 #' @param show_path Whether the paths
 #' being moderated will be displayed.
 #' Default is `TRUE`.
+#'
+#' @param pcut Any *p*-value less than
+#' `pcut` will be displayed as
+#' `<[pcut]`, `"[pcut]"` replaced by
+#' the value of `pcut`. Default is .001.
+#'
 #'
 #' @param ... Additional arguments.
 #' Ignored.
@@ -165,6 +173,7 @@ as_flextable.cond_indirect_effects <- function(x,
                                        show_wvalues = TRUE,
                                        show_indicators = FALSE,
                                        show_path = TRUE,
+                                       pcut = .001,
                                        ...) {
     # TODO: Remove after an update to manymome
     indirect_raw_ci <- FALSE
@@ -294,9 +303,13 @@ as_flextable.cond_indirect_effects <- function(x,
     ft <- flextable::colformat_double(ft,
                                       j = (colnames(coef0) %in% w_columns),
                                       digits = digits)
-    ft <- flextable::colformat_double(ft,
-                                      j = (colnames(coef0) %in% c("pvalue")),
-                                      digits = pval_digits)
+    # ft <- flextable::colformat_double(ft,
+    #                                   j = (colnames(coef0) %in% c("pvalue")),
+    #                                   digits = pval_digits)
+    ft <- flextable::set_formatter(ft,
+                                   pvalue = function(x) {
+                                           format_p(x, pcut = pcut)
+                                        })
     ft <- flextable::colformat_double(ft,
                                       j = (colnames(coef0) %in% c("CI.lo", "ind_raw_CI.lo")),
                                       digits = digits,
