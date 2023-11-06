@@ -211,8 +211,9 @@ get_wvalues <- function(object) {
 #' @noRd
 
 format_p <- function(pvals,
-                     pcut = .001) {
-  pd <- abs(floor(log10(pcut)))
+                     pcut = .001,
+                     pval_digits = 3) {
+  pd <- max(abs(floor(log10(pcut))), pval_digits)
   pvals_out <- as.character(formatC(pvals,
                                     digits = pd,
                                     format = "f",
@@ -224,5 +225,6 @@ format_p <- function(pvals,
                       flag = "#")
   pcut_str <- gsub("^0.", "<.", pcut_str)
   pvals_out[pvals < pcut] <- pcut_str
+  pvals_out[is.na(pvals)] <- ""
   return(pvals_out)
 }
