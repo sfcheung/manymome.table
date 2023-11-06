@@ -19,6 +19,7 @@
   show_wvalues = TRUE,
   show_indicators = FALSE,
   show_path = TRUE,
+  pcut = 0.001,
   ...
 )
 }
@@ -105,6 +106,11 @@ Default is \code{FALSE}.}
 \item{show_path}{Whether the paths
 being moderated will be displayed.
 Default is \code{TRUE}.}
+
+\item{pcut}{Any \emph{p}-value less than
+\code{pcut} will be displayed as
+\verb{<[pcut]}, \code{"[pcut]"} replaced by
+the value of \code{pcut}. Default is .001.}
 
 \item{...}{Additional arguments.
 Ignored.}

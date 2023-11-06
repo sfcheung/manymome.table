@@ -20,6 +20,7 @@
   y_first = TRUE,
   total_indirect = TRUE,
   footnote = TRUE,
+  pcut = 0.001,
   ...
 )
 }
@@ -112,6 +113,11 @@ the output.}
 default,
 add footnote(s) regarding the results
 to the bottom of the table.}
+
+\item{pcut}{Any \emph{p}-value less than
+\code{pcut} will be displayed as
+\verb{<[pcut]}, \code{"[pcut]"} replaced by
+the value of \code{pcut}. Default is .001.}
 
 \item{...}{Additional arguments.
 Ignored.}
