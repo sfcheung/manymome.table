@@ -334,7 +334,7 @@ as_flextable.indirect_list <- function(x,
     ft <- flextable::align(ft,
                            j = (colnames(coef0) %in%
                                   c("ind", "std", "SE", "ind_raw", "ind_raw_SE")),
-                           align = "center",
+                           align = "right",
                            part = "header")
     ft <- flextable::labelizor(ft,
                                labels = c("y" = "Outcome",

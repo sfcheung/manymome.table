@@ -175,7 +175,7 @@ ft1
 ft2 <- as_flextable(std_xmy_on_w,
                     var_labels = c(w = "Moderator"),
                     se = FALSE,
-                    digits = 2)
+                    digits = 3)
 ft2
 
 }

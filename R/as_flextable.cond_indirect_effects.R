@@ -151,7 +151,7 @@
 #' ft2 <- as_flextable(std_xmy_on_w,
 #'                     var_labels = c(w = "Moderator"),
 #'                     se = FALSE,
-#'                     digits = 2)
+#'                     digits = 3)
 #' ft2
 #'
 #' @export
@@ -342,7 +342,7 @@ as_flextable.cond_indirect_effects <- function(x,
     ft <- flextable::align(ft,
                            j = (colnames(coef0) %in%
                                   c("ind", "std", "SE", "ind_raw", "ind_raw_SE")),
-                           align = "center",
+                           align = "right",
                            part = "header")
     if (has_ci) {
         ft <- flextable::labelizor(ft,
