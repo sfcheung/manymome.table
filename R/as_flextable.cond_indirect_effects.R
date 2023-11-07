@@ -218,7 +218,7 @@ as_flextable.cond_indirect_effects <- function(x,
 
     if (has_ci) {
         level <- x_i$level
-        level_str <- paste0(formatC(level * 100, digits = 1, format = "f"),
+        level_str <- paste0(format(level * 100),
                             "% CI")
       } else {
         level <- NULL
@@ -315,7 +315,7 @@ as_flextable.cond_indirect_effects <- function(x,
     ft <- flextable::colformat_double(ft,
                                       j = (colnames(coef0) %in% c("CI.hi", "ind_raw_CI.hi")),
                                       digits = digits,
-                                      prefix = "; ",
+                                      prefix = ", ",
                                       suffix = "]")
     ft <- flextable::autofit(ft)
     if (has_ci) {
@@ -344,15 +344,27 @@ as_flextable.cond_indirect_effects <- function(x,
                                   c("ind", "std", "SE", "ind_raw", "ind_raw_SE")),
                            align = "center",
                            part = "header")
-    ft <- flextable::labelizor(ft,
-                               labels = c("CI.lo" = level_str,
-                                          "ind_raw_CI.lo" = level_str,
-                                          "SE" = "S.E.",
-                                          "ind_raw_SE" = "S.E."),
-                               part = "header")
-    ft <- flextable::labelizor(ft,
-                               labels = c("pvalue" = "p-value"),
-                               part = "header")
+    if (has_ci) {
+        ft <- flextable::labelizor(ft,
+                                  labels = c("CI.lo" = level_str,
+                                             "ind_raw_CI.lo" = level_str),
+                                  part = "header")
+      }
+    if (has_se) {
+        ft <- flextable::compose(ft,
+                                i = 1,
+                                j = (colnames(coef0) %in%
+                                      c("SE", "ind_raw_SE")),
+                                part = "header",
+                                flextable::as_paragraph(flextable::as_i("SE")))
+      }
+    if (has_pvalue) {
+        ft <- flextable::compose(ft,
+                                i = 1,
+                                j = "pvalue",
+                                part = "header",
+                                flextable::as_paragraph(flextable::as_i("p")))
+      }
     ft <- flextable::labelizor(ft,
                                labels = c("ind" = "Effect",
                                           "std" = "Std. Effect",
@@ -373,41 +385,115 @@ as_flextable.cond_indirect_effects <- function(x,
     # Add footer
 
     if (footnote) {
-        msg <- "Note:"
-        msg <- c(msg,
-                 paste("[w] is the meaning of a level of moderator 'w',",
-                       "or the label of a group,"))
+        first_note <- TRUE
+        ft <- flextable::add_footer_lines(ft, values = "")
+        ft <- flextable::compose(ft,
+                i = 1,
+                j = 1,
+                value = flextable::as_paragraph(flextable::as_i("Note")),
+                part = "footer")
+        ft <- flextable::append_chunks(ft,
+                flextable::as_paragraph(": "),
+                part = "footer")
+        if (all_w_numeric(x)) {
+            ft <- flextable::append_chunks(ft,
+                    flextable::as_paragraph("[w] is the meaning of a level of moderator 'w'"),
+                    part = "footer")
+          }
+        if (all_w_categorical(x)) {
+            ft <- flextable::append_chunks(ft,
+                    flextable::as_paragraph("[w] is the label of a group in moderator 'w'"),
+                    part = "footer")
+          }
+        if (!all_w_categorical(x) && !all_w_numeric((x))) {
+            ft <- flextable::append_chunks(ft,
+                    flextable::as_paragraph("[w] is the meaning of a level of moderator 'w' ",
+                                            "or the label of a group in moderator 'w'"),
+                    part = "footer")
+          }
+        first_note <- FALSE
         if (any(colnames(coef0) %in% wvalues_columns)) {
-            if (is.null(get_indicators(x)) || !show_indicators) {
-                msg <- c(msg,
-                        paste("(w) is the value of a level",
-                              "of moderator 'w'."))
+            if (first_note) {
+                first_note <- FALSE
               } else {
-                msg <- c(msg,
-                        paste("(w) is the value of a level",
-                              "of moderator 'w', or its indicators if 'w' is categorical."))
+                ft <- flextable::append_chunks(ft,
+                        flextable::as_paragraph("; "),
+                        part = "footer")
+              }
+            if (is.null(get_indicators(x)) || !show_indicators) {
+                ft <- flextable::append_chunks(ft,
+                        flextable::as_paragraph("(w) is the value of a level ",
+                                                 "of moderator 'w'"),
+                        part = "footer")
+              } else {
+                ft <- flextable::append_chunks(ft,
+                        flextable::as_paragraph("(w) is the value of a level ",
+                                                 "of moderator 'w', or its indicators if 'w' is categorical"),
+                        part = "footer")
               }
           }
         if (has_ci) {
-            msg <- c(msg,
-                     paste("CI is",
-                           ci_name,
-                           "confidence interval."))
+            if (first_note) {
+                first_note <- FALSE
+              } else {
+                ft <- flextable::append_chunks(ft,
+                        flextable::as_paragraph(": "),
+                        part = "footer")
+              }
+            ft <- flextable::append_chunks(ft,
+                    flextable::as_paragraph("CI = confidence interval"),
+                    part = "footer")
           }
         if (has_pvalue) {
-            msg <- c(msg,
-                     paste("The p-value is asymmetric bootstrap p-value."))
+            if (first_note) {
+                first_note <- FALSE
+                ft <- flextable::append_chunks(ft,
+                        flextable::as_paragraph(flextable::as_i("P ")),
+                        part = "footer")
+              } else {
+                ft <- flextable::append_chunks(ft,
+                        flextable::as_paragraph("; "),
+                        flextable::as_paragraph(flextable::as_i("p ")),
+                        part = "footer")
+              }
+            ft <- flextable::append_chunks(ft,
+                    flextable::as_paragraph("is asymmetric bootstrap "),
+                    flextable::as_paragraph(flextable::as_i("p")),
+                    flextable::as_paragraph("-value"),
+                    part = "footer")
           }
-        if (has_se) {
-            msg <- c(msg,
-                     paste("SE is",
-                           ci_name,
-                           "standard error."))
+        if (isTRUE(xor(std_x, std_y))) {
+            if (first_note) {
+                first_note <- FALSE
+              } else {
+                ft <- flextable::append_chunks(ft,
+                        flextable::as_paragraph("; "),
+                        part = "footer")
+              }
+            ft <- flextable::append_chunks(ft,
+                    flextable::as_paragraph("Std. Effect is partially standardized effect, "),
+                    flextable::as_paragraph("with ",
+                                            ifelse(std_x,
+                                                   "the predictor",
+                                                   "the outcome"),
+                                            " standardized"),
+                    part = "footer")
           }
-        if (length(msg) > 1) {
-            msg <- paste(msg, collapse = " ")
-            ft <- flextable::add_footer_lines(ft, msg)
+        if (std_x && std_y) {
+            if (first_note) {
+                first_note <- FALSE
+              } else {
+                ft <- flextable::append_chunks(ft,
+                        flextable::as_paragraph("; "),
+                        part = "footer")
+              }
+            ft <- flextable::append_chunks(ft,
+                    flextable::as_paragraph("Std. Effect is completely standardized effect"),
+                    part = "footer")
           }
+        ft <- flextable::append_chunks(ft,
+                flextable::as_paragraph("."),
+                part = "footer")
       }
 
     if (show_path) {
