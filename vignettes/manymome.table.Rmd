@@ -81,13 +81,10 @@ out_all
 The method `as_flextable()` can then be used
 to convert the output to a flextable. To use
 this method, we need to load the package
-`manymome.table` first. Because the
-method is from the `flextable` package,
-it also needs to be loaded:
+`manymome.table` first.
 
 ```{r}
 library(manymome.table)
-library(flextable)
 ft_all <- as_flextable(out_all)
 ft_all
 ```
@@ -140,14 +137,10 @@ out_cond
 ```
 
 The method `as_flextable()` can then be used
-to convert the output to a flextable. Again, to use
-this method, we need to load the package
-`manymome.table` and `flextable`, if they are not
-yet loaded:
+to convert the output to a flextable.
 
 ```{r}
 library(manymome.table)
-library(flextable)
 ft_cond <- as_flextable(out_cond)
 ft_cond
 ```
@@ -170,7 +163,7 @@ The output of both methods is a flextable
 object. Therefore, it can be further
 modified by functions for flextable.
 Load the package `flextable` first to
-use its function.
+use its functions.
 
 For example:
 
