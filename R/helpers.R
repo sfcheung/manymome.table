@@ -228,3 +228,25 @@ format_p <- function(pvals,
   pvals_out[is.na(pvals)] <- ""
   return(pvals_out)
 }
+
+#' @noRd
+
+all_w_numeric <- function(object) {
+    wlevels <- attr(object, "wlevels")
+    w_types <- attr(wlevels, "w_types")
+    if (is.null(w_types)) {
+        w_types <- attr(wlevels, "w_type")
+      }
+    return(all(w_types == "numeric"))
+  }
+
+#' @noRd
+
+all_w_categorical <- function(object) {
+    wlevels <- attr(object, "wlevels")
+    w_types <- attr(wlevels, "w_types")
+    if (is.null(w_types)) {
+        w_types <- attr(wlevels, "w_type")
+      }
+    return(all(w_types == "categorical"))
+  }

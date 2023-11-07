@@ -2,7 +2,7 @@
 % Please edit documentation in R/as_flextable.indirect_list.R
 \name{as_flextable.indirect_list}
 \alias{as_flextable.indirect_list}
-\title{Convert an 'indirect_list' Object to a \code{flextable} Object}
+\title{Convert an 'indirect_list' Object to a 'flextable' Object}
 \usage{
 \method{as_flextable}{indirect_list}(
   x,
