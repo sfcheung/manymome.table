@@ -1,12 +1,12 @@
-#' @title Convert an 'indirect_list' Object to a 'flextable' Object
+#' @title Convert an 'cond_indirect_effects' Object to a 'flextable' Object
 #'
 #' @description The 'as_flextable' method
 #' for the output of 'manymome::many_indirect_effects()'.
 #'
-#' @details It converts an `indirect_list`
+#' @details It converts an `cond_indirect_effects`
 #' object,
 #' which is usually created by
-#' [manymome::many_indirect_effects()],
+#' [manymome::cond_indirect_effects()],
 #' to a `flextable` object. The output
 #' can be further modified by functions
 #' from the `flextable` package.
@@ -15,7 +15,7 @@
 #' A `flextable` object.
 #'
 #' @param x The object to be converted.
-#' Should be of the class `indirect_list`
+#' Should be of the class `cond_indirect_effects`
 #' from the package `manymome`.
 #'
 #' @param pvalue If bootstrap confidence

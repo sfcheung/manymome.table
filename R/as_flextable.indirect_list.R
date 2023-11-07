@@ -1,4 +1,4 @@
-#' @title Convert an 'indirect_list' Object to a `flextable` Object
+#' @title Convert an 'indirect_list' Object to a 'flextable' Object
 #'
 #' @description The 'as_flextable' method
 #' for the output of 'manymome::many_indirect_effects()'.

@@ -2,7 +2,7 @@
 % Please edit documentation in R/as_flextable.cond_indirect_effects.R
 \name{as_flextable.cond_indirect_effects}
 \alias{as_flextable.cond_indirect_effects}
-\title{Convert an 'indirect_list' Object to a 'flextable' Object}
+\title{Convert an 'cond_indirect_effects' Object to a 'flextable' Object}
 \usage{
 \method{as_flextable}{cond_indirect_effects}(
   x,
@@ -25,7 +25,7 @@
 }
 \arguments{
 \item{x}{The object to be converted.
-Should be of the class \code{indirect_list}
+Should be of the class \code{cond_indirect_effects}
 from the package \code{manymome}.}
 
 \item{pvalue}{If bootstrap confidence
@@ -123,10 +123,10 @@ The 'as_flextable' method
 for the output of 'manymome::many_indirect_effects()'.
 }
 \details{
-It converts an \code{indirect_list}
+It converts an \code{cond_indirect_effects}
 object,
 which is usually created by
-\code{\link[manymome:cond_indirect]{manymome::many_indirect_effects()}},
+\code{\link[manymome:cond_indirect]{manymome::cond_indirect_effects()}},
 to a \code{flextable} object. The output
 can be further modified by functions
 from the \code{flextable} package.
