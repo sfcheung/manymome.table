@@ -1,4 +1,4 @@
-# manymome.table 0.1.7
+# manymome.table 0.1.8
 
 - Simplified the examples of `as_flextable.indirect_list()`. (0.1.1)`
 - Added a vignette. (0.1.2)
@@ -9,8 +9,10 @@
 - Fixed a test for `format_p()` after the
   introduction of the `pval_digits`
   argument. (0.1.6)
+- Reexport `as_flextable()`. (0.1.7)
 - Made the tables more in line with APA
   style (e.g., italicize *p*). (0.1.7)
+- Update vignette with CIs. (0.1.8)
 
 # manymome.table 0.1.0
 
