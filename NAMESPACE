@@ -2,4 +2,5 @@
 
 S3method(as_flextable,cond_indirect_effects)
 S3method(as_flextable,indirect_list)
+export(as_flextable)
 importFrom(flextable,as_flextable)

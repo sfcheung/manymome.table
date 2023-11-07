@@ -1,4 +1,4 @@
-#' @title Convert an 'indirect_list' Object to a `flextable` Object
+#' @title Convert an 'indirect_list' Object to a 'flextable' Object
 #'
 #' @description The 'as_flextable' method
 #' for the output of 'manymome::many_indirect_effects()'.
@@ -231,7 +231,7 @@ as_flextable.indirect_list <- function(x,
 
     if (has_ci) {
         level <- x[[1]]$level
-        level_str <- paste0(formatC(level * 100, digits = 1, format = "f"),
+        level_str <- paste0(format(level * 100),
                             "% CI")
       } else {
         level <- NULL
@@ -288,9 +288,6 @@ as_flextable.indirect_list <- function(x,
                                       j = (colnames(coef0) %in%
                                             c("ind", "std", "SE", "ind_raw", "ind_raw_SE")),
                                       digits = digits)
-    # ft <- flextable::colformat_double(ft,
-    #                                   j = (colnames(coef0) %in% c("pvalue")),
-    #                                   digits = pval_digits)
     ft <- flextable::set_formatter(ft,
                                    pvalue = function(x) {
                                            format_p(x, pcut = pcut, pval_digits = pval_digits)
@@ -302,7 +299,7 @@ as_flextable.indirect_list <- function(x,
     ft <- flextable::colformat_double(ft,
                                       j = (colnames(coef0) %in% c("CI.hi", "ind_raw_CI.hi")),
                                       digits = digits,
-                                      prefix = "; ",
+                                      prefix = ", ",
                                       suffix = "]")
     ft <- flextable::autofit(ft)
     if (has_ci) {
@@ -337,21 +334,33 @@ as_flextable.indirect_list <- function(x,
     ft <- flextable::align(ft,
                            j = (colnames(coef0) %in%
                                   c("ind", "std", "SE", "ind_raw", "ind_raw_SE")),
-                           align = "center",
+                           align = "right",
                            part = "header")
     ft <- flextable::labelizor(ft,
                                labels = c("y" = "Outcome",
                                           "x" = "Predictor"),
                                part = "header")
-    ft <- flextable::labelizor(ft,
-                               labels = c("CI.lo" = level_str,
-                                          "ind_raw_CI.lo" = level_str,
-                                          "SE" = "S.E.",
-                                          "ind_raw_SE" = "S.E."),
-                               part = "header")
-    ft <- flextable::labelizor(ft,
-                               labels = c("pvalue" = "p-value"),
-                               part = "header")
+    if (has_ci) {
+        ft <- flextable::labelizor(ft,
+                                  labels = c("CI.lo" = level_str,
+                                              "ind_raw_CI.lo" = level_str),
+                                  part = "header")
+      }
+    if (has_se) {
+        ft <- flextable::compose(ft,
+                                i = 1,
+                                j = (colnames(coef0) %in%
+                                      c("SE", "ind_raw_SE")),
+                                part = "header",
+                                flextable::as_paragraph(flextable::as_i("SE")))
+      }
+    if (has_pvalue) {
+        ft <- flextable::compose(ft,
+                                i = 1,
+                                j = "pvalue",
+                                part = "header",
+                                flextable::as_paragraph(flextable::as_i("p")))
+      }
     ft <- flextable::labelizor(ft,
                                labels = c("ind" = "Effect",
                                           "std" = "Std. Effect",
@@ -360,33 +369,87 @@ as_flextable.indirect_list <- function(x,
 
     # Add footer
 
-    if (footnote) {
-        msg <- "Note:"
+    if (footnote &&
+        any(has_ci, has_pvalue, total_indirect, std_x, std_y)) {
+        first_note <- TRUE
+        ft <- flextable::add_footer_lines(ft, values = "")
+        ft <- flextable::compose(ft,
+                i = 1,
+                j = 1,
+                value = flextable::as_paragraph(flextable::as_i("Note")),
+                part = "footer")
+        ft <- flextable::append_chunks(ft,
+                flextable::as_paragraph(": "),
+                part = "footer")
         if (has_ci) {
-            msg <- c(msg,
-                     paste("CI is",
-                           ci_name,
-                           "confidence interval."))
+            first_note <- FALSE
+            ft <- flextable::append_chunks(ft,
+                    flextable::as_paragraph("CI = confidence interval"),
+                    part = "footer")
           }
         if (has_pvalue) {
-            msg <- c(msg,
-                     paste("The p-value is asymmetric bootstrap p-value."))
-          }
-        if (has_se) {
-            msg <- c(msg,
-                     paste("SE is",
-                           ci_name,
-                           "standard error."))
+            first_note <- FALSE
+            if (first_note) {
+                ft <- flextable::append_chunks(ft,
+                        flextable::as_paragraph(flextable::as_i("P ")),
+                        part = "footer")
+              } else {
+                ft <- flextable::append_chunks(ft,
+                        flextable::as_paragraph("; "),
+                        flextable::as_paragraph(flextable::as_i("p ")),
+                        part = "footer")
+              }
+            ft <- flextable::append_chunks(ft,
+                    flextable::as_paragraph("is asymmetric bootstrap "),
+                    flextable::as_paragraph(flextable::as_i("p")),
+                    flextable::as_paragraph("-value"),
+                    part = "footer")
           }
         if (total_indirect) {
-            msg <- c(msg,
-                     paste("Paths with '..' are total indirect effects"))
+            first_note <- FALSE
+            if (first_note) {
+                ft <- flextable::append_chunks(ft,
+                        flextable::as_paragraph("Paths with '..' are total indirect effects"),
+                        part = "footer")
+              } else {
+                ft <- flextable::append_chunks(ft,
+                        flextable::as_paragraph("; "),
+                        flextable::as_paragraph("paths with '..' are total indirect effects"),
+                        part = "footer")
+              }
           }
-        if (length(msg) > 1) {
-            msg <- paste(msg, collapse = " ")
-            msg <- paste0(msg, ".")
-            ft <- flextable::add_footer_lines(ft, msg)
+        if (isTRUE(xor(std_x, std_y))) {
+            first_note <- FALSE
+            if (first_note) {
+              } else {
+                ft <- flextable::append_chunks(ft,
+                        flextable::as_paragraph("; "),
+                        part = "footer")
+              }
+            ft <- flextable::append_chunks(ft,
+                    flextable::as_paragraph("Std. Effect is partially standardized effect, "),
+                    flextable::as_paragraph("with ",
+                                            ifelse(std_x,
+                                                   "the predictor",
+                                                   "the outcome"),
+                                            " standardized"),
+                    part = "footer")
           }
+        if (std_x && std_y) {
+            first_note <- FALSE
+            if (first_note) {
+              } else {
+                ft <- flextable::append_chunks(ft,
+                        flextable::as_paragraph("; "),
+                        part = "footer")
+              }
+            ft <- flextable::append_chunks(ft,
+                    flextable::as_paragraph("Std. Effect is completely standardized effect"),
+                    part = "footer")
+          }
+        ft <- flextable::append_chunks(ft,
+                flextable::as_paragraph("."),
+                part = "footer")
       }
 
     ft <- flextable::autofit(ft)
