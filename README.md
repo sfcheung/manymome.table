@@ -1,12 +1,14 @@
 <!-- badges: start -->
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![Project Status: Active - The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![CRAN status](https://www.r-pkg.org/badges/version/manymome.table?color=blue)](https://CRAN.R-project.org/package=manymome.table)
+[![CRAN: Release Date](https://www.r-pkg.org/badges/last-release/manymome.table?color=blue)](https://cran.r-project.org/package=manymome.table)
 [![Code size](https://img.shields.io/github/languages/code-size/sfcheung/manymome.table.svg)](https://github.com/sfcheung/manymome.table)
 [![Last Commit at Main](https://img.shields.io/github/last-commit/sfcheung/manymome.table.svg)](https://github.com/sfcheung/manymome.table/commits/main)
 [![R-CMD-check](https://github.com/sfcheung/manymome.table/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/sfcheung/manymome.table/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-(Version 0.2.0, updated on 2023-11-08, [release history](https://sfcheung.github.io/manymome.table/news/index.html))
+(Version 0.2.1, updated on 2023-11-09, [release history](https://sfcheung.github.io/manymome.table/news/index.html))
 
 # manymome.table
 
@@ -28,9 +30,11 @@ https://sfcheung.github.io/manymome.table/
 
 # Installation
 
-Stable release versions of this package can be downloaded below:
+The stable CRAN version can be installed by `install.packages()`:
 
-https://github.com/sfcheung/manymome.table/releases
+```r
+install.packages("manymome.table")
+```
 
 The latest developmental version of this package can be installed by `remotes::install_github`:
 
