@@ -391,12 +391,12 @@ as_flextable.indirect_list <- function(x,
             first_note <- FALSE
             if (first_note) {
                 ft <- flextable::append_chunks(ft,
-                        flextable::as_chunk(flextable::as_i("P ")),
+                        flextable::as_i("P "),
                         part = "footer")
               } else {
                 ft <- flextable::append_chunks(ft,
                         flextable::as_chunk("; "),
-                        flextable::as_chunk(flextable::as_i("p ")),
+                        flextable::as_i("p "),
                         part = "footer")
               }
             ft <- flextable::append_chunks(ft,
@@ -428,11 +428,11 @@ as_flextable.indirect_list <- function(x,
               }
             ft <- flextable::append_chunks(ft,
                     flextable::as_chunk("Std. Effect is partially standardized effect, "),
-                    flextable::as_chunk("with ",
+                    flextable::as_chunk(paste0("with ",
                                             ifelse(std_x,
                                                    "the predictor",
                                                    "the outcome"),
-                                            " standardized"),
+                                            " standardized")),
                     part = "footer")
           }
         if (std_x && std_y) {

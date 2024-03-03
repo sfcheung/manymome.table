@@ -407,8 +407,7 @@ as_flextable.cond_indirect_effects <- function(x,
           }
         if (!all_w_categorical(x) && !all_w_numeric((x))) {
             ft <- flextable::append_chunks(ft,
-                    flextable::as_chunk("[w] is the meaning of a level of moderator 'w' ",
-                                            "or the label of a group in moderator 'w'"),
+                    flextable::as_chunk("[w] is the meaning of a level of moderator 'w' or the label of a group in moderator 'w'"),
                     part = "footer")
           }
         first_note <- FALSE
@@ -446,17 +445,17 @@ as_flextable.cond_indirect_effects <- function(x,
             if (first_note) {
                 first_note <- FALSE
                 ft <- flextable::append_chunks(ft,
-                        flextable::as_chunk(flextable::as_i("P ")),
+                        flextable::as_i("P "),
                         part = "footer")
               } else {
                 ft <- flextable::append_chunks(ft,
                         flextable::as_chunk("; "),
-                        flextable::as_chunk(flextable::as_i("p ")),
+                        flextable::as_i("p "),
                         part = "footer")
               }
             ft <- flextable::append_chunks(ft,
                     flextable::as_chunk("is asymmetric bootstrap "),
-                    flextable::as_chunk(flextable::as_i("p")),
+                    flextable::as_i("p"),
                     flextable::as_chunk("-value"),
                     part = "footer")
           }
