@@ -393,22 +393,21 @@ as_flextable.cond_indirect_effects <- function(x,
                 value = flextable::as_paragraph(flextable::as_i("Note")),
                 part = "footer")
         ft <- flextable::append_chunks(ft,
-                flextable::as_paragraph(": "),
+                flextable::as_chunk(": "),
                 part = "footer")
         if (all_w_numeric(x)) {
             ft <- flextable::append_chunks(ft,
-                    flextable::as_paragraph("[w] is the meaning of a level of moderator 'w'"),
+                    flextable::as_chunk("[w] is the meaning of a level of moderator 'w'"),
                     part = "footer")
           }
         if (all_w_categorical(x)) {
             ft <- flextable::append_chunks(ft,
-                    flextable::as_paragraph("[w] is the label of a group in moderator 'w'"),
+                    flextable::as_chunk("[w] is the label of a group in moderator 'w'"),
                     part = "footer")
           }
         if (!all_w_categorical(x) && !all_w_numeric((x))) {
             ft <- flextable::append_chunks(ft,
-                    flextable::as_paragraph("[w] is the meaning of a level of moderator 'w' ",
-                                            "or the label of a group in moderator 'w'"),
+                    flextable::as_chunk("[w] is the meaning of a level of moderator 'w' or the label of a group in moderator 'w'"),
                     part = "footer")
           }
         first_note <- FALSE
@@ -417,18 +416,16 @@ as_flextable.cond_indirect_effects <- function(x,
                 first_note <- FALSE
               } else {
                 ft <- flextable::append_chunks(ft,
-                        flextable::as_paragraph("; "),
+                        flextable::as_chunk("; "),
                         part = "footer")
               }
             if (is.null(get_indicators(x)) || !show_indicators) {
                 ft <- flextable::append_chunks(ft,
-                        flextable::as_paragraph("(w) is the value of a level ",
-                                                 "of moderator 'w'"),
+                        flextable::as_chunk("(w) is the value of a level of moderator 'w'"),
                         part = "footer")
               } else {
                 ft <- flextable::append_chunks(ft,
-                        flextable::as_paragraph("(w) is the value of a level ",
-                                                 "of moderator 'w', or its indicators if 'w' is categorical"),
+                        flextable::as_chunk("(w) is the value of a level of moderator 'w', or its indicators if 'w' is categorical"),
                         part = "footer")
               }
           }
@@ -437,29 +434,29 @@ as_flextable.cond_indirect_effects <- function(x,
                 first_note <- FALSE
               } else {
                 ft <- flextable::append_chunks(ft,
-                        flextable::as_paragraph(": "),
+                        flextable::as_chunk(": "),
                         part = "footer")
               }
             ft <- flextable::append_chunks(ft,
-                    flextable::as_paragraph("CI = confidence interval"),
+                    flextable::as_chunk("CI = confidence interval"),
                     part = "footer")
           }
         if (has_pvalue) {
             if (first_note) {
                 first_note <- FALSE
                 ft <- flextable::append_chunks(ft,
-                        flextable::as_paragraph(flextable::as_i("P ")),
+                        flextable::as_i("P "),
                         part = "footer")
               } else {
                 ft <- flextable::append_chunks(ft,
-                        flextable::as_paragraph("; "),
-                        flextable::as_paragraph(flextable::as_i("p ")),
+                        flextable::as_chunk("; "),
+                        flextable::as_i("p "),
                         part = "footer")
               }
             ft <- flextable::append_chunks(ft,
-                    flextable::as_paragraph("is asymmetric bootstrap "),
-                    flextable::as_paragraph(flextable::as_i("p")),
-                    flextable::as_paragraph("-value"),
+                    flextable::as_chunk("is asymmetric bootstrap "),
+                    flextable::as_i("p"),
+                    flextable::as_chunk("-value"),
                     part = "footer")
           }
         if (isTRUE(xor(std_x, std_y))) {
@@ -467,16 +464,16 @@ as_flextable.cond_indirect_effects <- function(x,
                 first_note <- FALSE
               } else {
                 ft <- flextable::append_chunks(ft,
-                        flextable::as_paragraph("; "),
+                        flextable::as_chunk("; "),
                         part = "footer")
               }
             ft <- flextable::append_chunks(ft,
-                    flextable::as_paragraph("Std. Effect is partially standardized effect, "),
-                    flextable::as_paragraph("with ",
+                    flextable::as_chunk("Std. Effect is partially standardized effect, "),
+                    flextable::as_chunk(paste0("with ",
                                             ifelse(std_x,
                                                    "the predictor",
                                                    "the outcome"),
-                                            " standardized"),
+                                            " standardized")),
                     part = "footer")
           }
         if (std_x && std_y) {
@@ -484,15 +481,15 @@ as_flextable.cond_indirect_effects <- function(x,
                 first_note <- FALSE
               } else {
                 ft <- flextable::append_chunks(ft,
-                        flextable::as_paragraph("; "),
+                        flextable::as_chunk("; "),
                         part = "footer")
               }
             ft <- flextable::append_chunks(ft,
-                    flextable::as_paragraph("Std. Effect is completely standardized effect"),
+                    flextable::as_chunk("Std. Effect is completely standardized effect"),
                     part = "footer")
           }
         ft <- flextable::append_chunks(ft,
-                flextable::as_paragraph("."),
+                flextable::as_chunk("."),
                 part = "footer")
       }
 

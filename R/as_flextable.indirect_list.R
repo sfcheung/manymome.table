@@ -379,42 +379,42 @@ as_flextable.indirect_list <- function(x,
                 value = flextable::as_paragraph(flextable::as_i("Note")),
                 part = "footer")
         ft <- flextable::append_chunks(ft,
-                flextable::as_paragraph(": "),
+                flextable::as_chunk(": "),
                 part = "footer")
         if (has_ci) {
             first_note <- FALSE
             ft <- flextable::append_chunks(ft,
-                    flextable::as_paragraph("CI = confidence interval"),
+                    flextable::as_chunk("CI = confidence interval"),
                     part = "footer")
           }
         if (has_pvalue) {
             first_note <- FALSE
             if (first_note) {
                 ft <- flextable::append_chunks(ft,
-                        flextable::as_paragraph(flextable::as_i("P ")),
+                        flextable::as_i("P "),
                         part = "footer")
               } else {
                 ft <- flextable::append_chunks(ft,
-                        flextable::as_paragraph("; "),
-                        flextable::as_paragraph(flextable::as_i("p ")),
+                        flextable::as_chunk("; "),
+                        flextable::as_i("p "),
                         part = "footer")
               }
             ft <- flextable::append_chunks(ft,
-                    flextable::as_paragraph("is asymmetric bootstrap "),
-                    flextable::as_paragraph(flextable::as_i("p")),
-                    flextable::as_paragraph("-value"),
+                    flextable::as_chunk("is asymmetric bootstrap "),
+                    flextable::as_i("p"),
+                    flextable::as_chunk("-value"),
                     part = "footer")
           }
         if (total_indirect) {
             first_note <- FALSE
             if (first_note) {
                 ft <- flextable::append_chunks(ft,
-                        flextable::as_paragraph("Paths with '..' are total indirect effects"),
+                        flextable::as_chunk("Paths with '..' are total indirect effects"),
                         part = "footer")
               } else {
                 ft <- flextable::append_chunks(ft,
-                        flextable::as_paragraph("; "),
-                        flextable::as_paragraph("paths with '..' are total indirect effects"),
+                        flextable::as_chunk("; "),
+                        flextable::as_chunk("paths with '..' are total indirect effects"),
                         part = "footer")
               }
           }
@@ -423,16 +423,16 @@ as_flextable.indirect_list <- function(x,
             if (first_note) {
               } else {
                 ft <- flextable::append_chunks(ft,
-                        flextable::as_paragraph("; "),
+                        flextable::as_chunk("; "),
                         part = "footer")
               }
             ft <- flextable::append_chunks(ft,
-                    flextable::as_paragraph("Std. Effect is partially standardized effect, "),
-                    flextable::as_paragraph("with ",
+                    flextable::as_chunk("Std. Effect is partially standardized effect, "),
+                    flextable::as_chunk(paste0("with ",
                                             ifelse(std_x,
                                                    "the predictor",
                                                    "the outcome"),
-                                            " standardized"),
+                                            " standardized")),
                     part = "footer")
           }
         if (std_x && std_y) {
@@ -440,15 +440,15 @@ as_flextable.indirect_list <- function(x,
             if (first_note) {
               } else {
                 ft <- flextable::append_chunks(ft,
-                        flextable::as_paragraph("; "),
+                        flextable::as_chunk("; "),
                         part = "footer")
               }
             ft <- flextable::append_chunks(ft,
-                    flextable::as_paragraph("Std. Effect is completely standardized effect"),
+                    flextable::as_chunk("Std. Effect is completely standardized effect"),
                     part = "footer")
           }
         ft <- flextable::append_chunks(ft,
-                flextable::as_paragraph("."),
+                flextable::as_chunk("."),
                 part = "footer")
       }
 
