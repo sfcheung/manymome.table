@@ -1,3 +1,12 @@
+# manymome.table 0.3.1
+
+- The optional arguments (`...`) of
+  `as_flextable.cond_indirect_effects()`
+  and `as_flextable.indirect_list()`
+  are now passed to `flextable::autofit()`
+  when preparing the final output.
+  (0.3.1)
+
 # manymome.table 0.3.0
 
 - Minor changes to the `README.md`
