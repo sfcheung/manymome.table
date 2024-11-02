@@ -120,7 +120,10 @@ to the bottom of the table.}
 the value of \code{pcut}. Default is .001.}
 
 \item{...}{Additional arguments.
-Ignored.}
+To be passed to \code{\link[flextable:autofit]{flextable::autofit()}}
+in preparing the final table. For
+example, if some lines are too lone
+and wrapped, try adding \code{add_w = .2}.}
 }
 \value{
 A \code{flextable} object.

@@ -110,7 +110,10 @@
 #' the value of `pcut`. Default is .001.
 #'
 #' @param ... Additional arguments.
-#' Ignored.
+#' To be passed to [flextable::autofit()]
+#' in preparing the final table. For
+#' example, if some lines are too lone
+#' and wrapped, try adding `add_w = .2`.
 #'
 #' @examples
 #'
@@ -452,6 +455,6 @@ as_flextable.indirect_list <- function(x,
                 part = "footer")
       }
 
-    ft <- flextable::autofit(ft)
+    ft <- flextable::autofit(ft, ...)
     ft
   }

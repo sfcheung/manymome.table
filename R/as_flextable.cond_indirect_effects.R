@@ -105,7 +105,10 @@
 #'
 #'
 #' @param ... Additional arguments.
-#' Ignored.
+#' To be passed to [flextable::autofit()]
+#' in preparing the final table. For
+#' example, if some lines are too lone
+#' and wrapped, try adding `add_w = .2`.
 #'
 #' @examples
 #'
@@ -500,6 +503,6 @@ as_flextable.cond_indirect_effects <- function(x,
                                         colwidths = flextable::ncol_keys(ft))
       }
 
-    ft <- flextable::autofit(ft)
+    ft <- flextable::autofit(ft, ...)
     ft
   }
