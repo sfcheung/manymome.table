@@ -1,36 +1,14 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://sfcheung.github.io/manymome.table/404.html</loc>
-  </url>
-  <url>
-    <loc>https://sfcheung.github.io/manymome.table/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://sfcheung.github.io/manymome.table/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://sfcheung.github.io/manymome.table/articles/manymome.table.html</loc>
-  </url>
-  <url>
-    <loc>https://sfcheung.github.io/manymome.table/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://sfcheung.github.io/manymome.table/index.html</loc>
-  </url>
-  <url>
-    <loc>https://sfcheung.github.io/manymome.table/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://sfcheung.github.io/manymome.table/reference/as_flextable.cond_indirect_effects.html</loc>
-  </url>
-  <url>
-    <loc>https://sfcheung.github.io/manymome.table/reference/as_flextable.indirect_list.html</loc>
-  </url>
-  <url>
-    <loc>https://sfcheung.github.io/manymome.table/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://sfcheung.github.io/manymome.table/reference/reexports.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://sfcheung.github.io/manymome.table/404.html</loc></url>
+<url><loc>https://sfcheung.github.io/manymome.table/LICENSE.html</loc></url>
+<url><loc>https://sfcheung.github.io/manymome.table/articles/index.html</loc></url>
+<url><loc>https://sfcheung.github.io/manymome.table/articles/manymome.table.html</loc></url>
+<url><loc>https://sfcheung.github.io/manymome.table/authors.html</loc></url>
+<url><loc>https://sfcheung.github.io/manymome.table/index.html</loc></url>
+<url><loc>https://sfcheung.github.io/manymome.table/news/index.html</loc></url>
+<url><loc>https://sfcheung.github.io/manymome.table/reference/as_flextable.cond_indirect_effects.html</loc></url>
+<url><loc>https://sfcheung.github.io/manymome.table/reference/as_flextable.indirect_list.html</loc></url>
+<url><loc>https://sfcheung.github.io/manymome.table/reference/index.html</loc></url>
+<url><loc>https://sfcheung.github.io/manymome.table/reference/reexports.html</loc></url>
 </urlset>
+
