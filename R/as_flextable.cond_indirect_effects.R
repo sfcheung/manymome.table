@@ -103,9 +103,20 @@
 #' `<[pcut]`, `"[pcut]"` replaced by
 #' the value of `pcut`. Default is .001.
 #'
+#' @param level The level of confidence
+#' for the confidence intervals computed
+#' from the original standard errors
+#' (e.g., the standard errors in
+#' [stats::lm()] or `lavaan`).
+#' Used only for paths without mediators
+#' and both x- and y-variables are not
+#' standardized. Default is .95.
 #'
 #' @param ... Additional arguments.
-#' Ignored.
+#' To be passed to [flextable::autofit()]
+#' in preparing the final table. For
+#' example, if some lines are too lone
+#' and wrapped, try adding `add_w = .2`.
 #'
 #' @examples
 #'
@@ -172,6 +183,7 @@ as_flextable.cond_indirect_effects <- function(x,
                                        show_indicators = FALSE,
                                        show_path = TRUE,
                                        pcut = .001,
+                                       level = .95,
                                        ...) {
     # TODO: Remove after an update to manymome
     indirect_raw_ci <- FALSE
@@ -182,15 +194,44 @@ as_flextable.cond_indirect_effects <- function(x,
     x_i <- full_output[[1]]
     std_x <- isTRUE(x_i$standardized_x)
     std_y <- isTRUE(x_i$standardized_y)
-
-    x_list <- list2indirect_list(full_output)
-    coef0 <- manymome::indirect_effects_from_list(x_list,
-                                                  add_sig = FALSE,
-                                                  pvalue = pvalue,
-                                                  se = se)
+    # x_list <- list2indirect_list(full_output)
+    # coef0 <- manymome::indirect_effects_from_list(x_list,
+    #                                               add_sig = FALSE,
+    #                                               pvalue = pvalue,
+    #                                               se = se)
+    coef0 <- as.data.frame(x,
+                           digits = TRUE,
+                           add_sig = FALSE,
+                           pvalue = pvalue,
+                           pvalue_digits = pval_digits,
+                           se = se,
+                           level = level,
+                           to_string = FALSE)
     # Fix the column names
     if (std_x || std_y) {
-        colnames(coef0)[colnames(coef0) %in% "ind"] <- "std"
+        coef0 <- coef0[, -which(colnames(coef0) == "ind")]
+        colnames(coef0)[colnames(coef0) %in% "std"] <- "std"
+      }
+    # Remove component path estimates
+    j <- max(match(c("ind", "std", "CI.lo", "CI.hi", "SE", "pvalue"),
+                   colnames(coef0)), na.rm = TRUE)
+    if (j < ncol(coef0)) {
+        coef0 <- coef0[, seq_len(j), drop = FALSE]
+      }
+
+    # Remove the `Stat` column, for consistency.
+    # TODO:
+    # - May keep this column in the future.
+    j <- match("Stat", colnames(coef0))
+    if (!is.na(j)) {
+        coef0 <- coef0[, -j, drop = FALSE]
+      }
+
+    # Remove the columns with moderator values.
+    # Add them using this function, for compatibility.
+    j <- min(match(c("ind", "std"), colnames(coef0)), na.rm = TRUE)
+    if (j > 1) {
+        coef0 <- coef0[, -seq_len(j - 1), drop = FALSE]
       }
 
     x0 <- x_i$x
@@ -215,9 +256,10 @@ as_flextable.cond_indirect_effects <- function(x,
     has_pvalue <- "pvalue" %in% colnames(coef0)
     has_ci <- "CI.lo" %in% colnames(coef0)
     has_se <- "SE" %in% colnames(coef0)
-
     if (has_ci) {
-        level <- x_i$level
+        if (!is.null(x_i$level)) {
+            level <- x_i$level
+          }
         level_str <- paste0(format(level * 100),
                             "% CI")
       } else {
@@ -289,7 +331,6 @@ as_flextable.cond_indirect_effects <- function(x,
         w_df <- w_df[, !tmp, drop = FALSE]
       }
     coef0 <- cbind(w_df, coef0)
-
     ft <- flextable::flextable(coef0)
 
     # Format Cells
@@ -500,6 +541,6 @@ as_flextable.cond_indirect_effects <- function(x,
                                         colwidths = flextable::ncol_keys(ft))
       }
 
-    ft <- flextable::autofit(ft)
+    ft <- flextable::autofit(ft, ...)
     ft
   }

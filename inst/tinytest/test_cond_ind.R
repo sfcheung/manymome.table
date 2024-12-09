@@ -188,10 +188,11 @@ tmp4 <- formatC(tmp3$pvalue[3], digits = 5, format = "f")
 tmp4 <- gsub("^0.", ".", tmp4)
 expect_match(tmp, tmp4)
 
-
+# In the latest version of manymome,
+# SE-based CI will be included for moderation-only unstandardized paths.
 tmp1 <- as_flextable(outmo_1, digits = 4)
 tmp <- to_html(tmp1)
-expect_equal(ncol_keys(tmp1), 2)
+expect_equal(ncol_keys(tmp1), 5)
 expect_match(tmp, "[gp]")
 expect_false(grepl("gpgp2", tmp, fixed = TRUE))
 expect_match(tmp, formatC(coef(outmo_1)[1], digits = 4, format = "f"))
