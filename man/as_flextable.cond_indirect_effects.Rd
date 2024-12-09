@@ -20,6 +20,7 @@
   show_indicators = FALSE,
   show_path = TRUE,
   pcut = 0.001,
+  level = 0.95,
   ...
 )
 }
@@ -111,6 +112,15 @@ Default is \code{TRUE}.}
 \code{pcut} will be displayed as
 \verb{<[pcut]}, \code{"[pcut]"} replaced by
 the value of \code{pcut}. Default is .001.}
+
+\item{level}{The level of confidence
+for the confidence intervals computed
+from the original standard errors
+(e.g., the standard errors in
+\code{\link[stats:lm]{stats::lm()}} or \code{lavaan}).
+Used only for paths without mediators
+and both x- and y-variables are not
+standardized. Default is .95.}
 
 \item{...}{Additional arguments.
 To be passed to \code{\link[flextable:autofit]{flextable::autofit()}}
