@@ -1,4 +1,9 @@
-# manymome.table 0.3.2
+# manymome.table 0.4.0
+
+- Updated to print SE-based confidence
+  intervals and *p*-values when a path
+  has no mediator and effect not
+  standardized. (0.3.2)
 
 - The optional arguments (`...`) of
   `as_flextable.cond_indirect_effects()`
@@ -6,11 +11,6 @@
   are now passed to `flextable::autofit()`
   when preparing the final output.
   (0.3.1)
-
-- Updated to print SE-based confidence
-  intervals and *p*-values when a path
-  has no mediator and effect not
-  standardized. (0.3.2)
 
 # manymome.table 0.3.0
 
