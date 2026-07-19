@@ -7,14 +7,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Publication-Ready Tables for manymome Results • manymome.table</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/Hind-0.4.9/font.css" rel="stylesheet">
-<link href="deps/Oxygen_Mono-0.4.9/font.css" rel="stylesheet">
+<link href="deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/Hind-0.4.10/font.css" rel="stylesheet">
+<link href="deps/Oxygen_Mono-0.4.10/font.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Publication-Ready Tables for manymome Results">
-<meta name="description" content="Converts results from the manymome package, presented in Cheung and Cheung (2023) &lt;doi:10.3758/s13428-023-02224-z&gt;, to publication-ready tables.">
-<meta property="og:description" content="Converts results from the manymome package, presented in Cheung and Cheung (2023) &lt;doi:10.3758/s13428-023-02224-z&gt;, to publication-ready tables.">
+<meta name="description" content="Converts results from the manymome package, presented in Cheung and Cheung (2024) &lt;doi:10.3758/s13428-023-02224-z&gt;, to publication-ready tables.">
+<meta property="og:description" content="Converts results from the manymome package, presented in Cheung and Cheung (2024) &lt;doi:10.3758/s13428-023-02224-z&gt;, to publication-ready tables.">
 <meta name="google-site-verification" content="0VLBmFnW_UJFI-7gXnORPBsWxqZwmzuGpK-TeVRLBjQ">
 </head>
 <body>
@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="index.html">manymome.table</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,14 +56,14 @@
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9">
-<p>(Version 0.4.0, updated on 2024-12-10, <a href="https://sfcheung.github.io/manymome.table/news/index.html">release history</a>)</p>
+<p>(Version 0.4.1, updated on 2026-07-19, <a href="https://sfcheung.github.io/manymome.table/news/index.html">release history</a>)</p>
 <div class="section level1">
 <div class="page-header"><h1 id="manymometable">manymome.table<a class="anchor" aria-label="anchor" href="#manymometable"></a>
 </h1></div>
-<p>A collection of helper functions for converting selected results of <a href="https://sfcheung.github.io/manymome/" class="external-link"><code>manymome</code></a> (<a href="https://doi.org/10.3758/s13428-023-02224-z" class="external-link">Cheung &amp; Cheung, 2023</a>) to publication-ready tables.</p>
+<p>A collection of helper functions for converting selected results of <a href="https://sfcheung.github.io/manymome/" class="external-link"><code>manymome</code></a> (<a href="https://doi.org/10.3758/s13428-023-02224-z" class="external-link">Cheung &amp; Cheung, 2024</a>) to publication-ready tables.</p>
 <p>It currently supports the <code>flextable</code> format from the <a href="https://davidgohel.github.io/flextable/" class="external-link"><code>flextable</code> package</a>. Results from <code><a href="https://sfcheung.github.io/manymome/reference/cond_indirect.html" class="external-link">manymome::many_indirect_effects()</a></code> and <code><a href="https://sfcheung.github.io/manymome/reference/cond_indirect.html" class="external-link">manymome::cond_indirect_effects()</a></code> can be converted to <code>flextable</code> objects using the method <code><a href="https://davidgohel.github.io/flextable/reference/as_flextable.html" class="external-link">as_flextable()</a></code>. They can then be exported to other formats, such as Word.</p>
 <p>For more information on this package, please visit its GitHub page:</p>
-<p><a href="https://sfcheung.github.io/manymome.table/" class="uri">https://sfcheung.github.io/manymome.table/</a></p>
+<p><a href="https://sfcheung.github.io/manymome.table/">https://sfcheung.github.io/manymome.table/</a></p>
 </div>
 <div class="section level1">
 <h1 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -78,12 +78,15 @@
 <div class="section level1">
 <h1 id="reference">Reference<a class="anchor" aria-label="anchor" href="#reference"></a>
 </h1>
-<p>Cheung, S. F., &amp; Cheung, S.-H. (2023). <em>manymome</em>: An R package for computing the indirect effects, conditional effects, and conditional indirect effects, standardized or unstandardized, and their bootstrap confidence intervals, in many (though not all) models. <em>Behavior Research Methods</em>. <a href="https://doi.org/10.3758/s13428-023-02224-z" class="external-link uri">https://doi.org/10.3758/s13428-023-02224-z</a></p>
+<ul>
+<li>Cheung, S. F., &amp; Cheung, S.-H. (2024). <em>manymome</em>: An R package for computing the indirect effects, conditional effects, and conditional indirect effects, standardized or unstandardized, and their bootstrap confidence intervals, in many (though not all) models. <em>Behavior Research Methods, 56</em>(5), 4862–4882. <a href="https://doi.org/10.3758/s13428-023-02224-z" class="external-link">https://doi.org/10.3758/s13428-023-02224-z</a>
+</li>
+</ul>
 </div>
 <div class="section level1">
 <h1 id="issues">Issues<a class="anchor" aria-label="anchor" href="#issues"></a>
 </h1>
-<p>If you have any suggestions and found any bugs, please feel feel to open a GitHub issue. Thanks.</p>
+<p>If you have any suggestions and found any bugs, please feel free to open a GitHub issue. Thanks.</p>
 </div>
 
   </main><aside class="col-md-3"><div class="links">
@@ -114,8 +117,8 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Shu Fai Cheung <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-9871-9448" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>Sing-Hang Cheung <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0001-5182-0752" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Shu Fai Cheung <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-9871-9448" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
+<li>Sing-Hang Cheung <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0001-5182-0752" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
 </ul>
 </div>
 
@@ -141,7 +144,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>
