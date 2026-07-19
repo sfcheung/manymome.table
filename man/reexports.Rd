@@ -11,6 +11,6 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{flextable}{\code{\link[flextable]{as_flextable}}}
+  \item{flextable}{\code{\link[flextable:as_flextable]{as_flextable()}}}
 }}
 

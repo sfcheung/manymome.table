@@ -25,7 +25,7 @@ This article is a brief illustration of how convert
 some results
 from the package
 [manymome](https://sfcheung.github.io/manymome/index.html)
-([Cheung & Cheung, 2023](https://doi.org/10.3758/s13428-023-02224-z))
+([Cheung & Cheung, 2024](https://doi.org/10.3758/s13428-023-02224-z))
 to publication-ready tables using the functions
 from [manymome.table](https://sfcheung.github.io/manymome.table/index.html).
 It assumes readers

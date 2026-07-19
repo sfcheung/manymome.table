@@ -1,4 +1,10 @@
-# manymome.table 0.4.0
+# manymome.table 0.4.1
+
+- Minor updates to the README page
+  and DESCRIPTION.
+  (0.4.1)
+
+# manymome.table 0.4.1
 
 - Updated to print SE-based confidence
   intervals and *p*-values when a path

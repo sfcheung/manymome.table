@@ -8,13 +8,13 @@
 [![R-CMD-check](https://github.com/sfcheung/manymome.table/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/sfcheung/manymome.table/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-(Version 0.4.0, updated on 2024-12-10, [release history](https://sfcheung.github.io/manymome.table/news/index.html))
+(Version 0.4.1, updated on 2026-07-19, [release history](https://sfcheung.github.io/manymome.table/news/index.html))
 
 # manymome.table
 
 A collection of helper functions for converting
 selected results of [`manymome`](https://sfcheung.github.io/manymome/)
-([Cheung & Cheung, 2023](https://doi.org/10.3758/s13428-023-02224-z)) to publication-ready
+([Cheung & Cheung, 2024](https://doi.org/10.3758/s13428-023-02224-z)) to publication-ready
 tables.
 
 It currently supports the `flextable` format from
@@ -26,7 +26,7 @@ They can then be exported to other formats, such as Word.
 
 For more information on this package, please visit its GitHub page:
 
-https://sfcheung.github.io/manymome.table/
+[https://sfcheung.github.io/manymome.table/](https://sfcheung.github.io/manymome.table/)
 
 # Installation
 
@@ -44,13 +44,19 @@ remotes::install_github("sfcheung/manymome.table")
 
 # Reference
 
-Cheung, S. F., & Cheung, S.-H. (2023). *manymome*: An R package for computing
-the indirect effects, conditional effects, and conditional indirect effects,
-standardized or unstandardized, and their bootstrap confidence intervals,
-in many (though not all) models. *Behavior Research Methods*.
-https://doi.org/10.3758/s13428-023-02224-z
+- Cheung, S. F., & Cheung, S.-H. (2024).
+  *manymome*: An R package for computing
+  the indirect effects, conditional
+  effects, and conditional indirect
+  effects, standardized or unstandardized,
+  and their bootstrap confidence intervals,
+  in many (though not all) models.
+  *Behavior Research Methods, 56*(5),
+  4862--4882.
+  [https://doi.org/10.3758/s13428-023-02224-z](https://doi.org/10.3758/s13428-023-02224-z)
+
 
 # Issues
 
 If you have any suggestions and found any bugs, please feel
-feel to open a GitHub issue. Thanks.
+free to open a GitHub issue. Thanks.

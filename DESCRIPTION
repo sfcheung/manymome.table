@@ -1,6 +1,6 @@
 Package: manymome.table
 Title: Publication-Ready Tables for 'manymome' Results
-Version: 0.4.0
+Version: 0.4.1
 Authors@R:
     c(person(given = "Shu Fai",
            family = "Cheung",
@@ -12,7 +12,7 @@ Authors@R:
            role = c("aut"),
            comment = c(ORCID = "0000-0001-5182-0752")))
 Description: Converts results from the 'manymome' package,
-  presented in Cheung and Cheung (2023)
+  presented in Cheung and Cheung (2024)
   <doi:10.3758/s13428-023-02224-z>, to publication-ready
   tables.
 URL: https://sfcheung.github.io/manymome.table/
@@ -20,7 +20,6 @@ BugReports: https://github.com/sfcheung/manymome.table/issues
 License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
 Suggests:
     knitr,
     rmarkdown,
@@ -34,3 +33,4 @@ LazyData: true
 Imports:
     manymome,
     flextable
+Config/roxygen2/version: 8.0.0

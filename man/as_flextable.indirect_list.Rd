@@ -136,7 +136,7 @@ for the output of 'manymome::many_indirect_effects()'.
 It converts an \code{indirect_list}
 object,
 which is usually created by
-\code{\link[manymome:cond_indirect]{manymome::many_indirect_effects()}},
+\code{\link[manymome:many_indirect_effects]{manymome::many_indirect_effects()}},
 to a \code{flextable} object. The output
 can be further modified by functions
 from the package \code{flextable}.
