@@ -1,3 +1,9 @@
+# manymome.table 0.4.1
+
+- Minor updates to the README page
+  and DESCRIPTION.
+  (0.4.1)
+
 # manymome.table 0.4.0
 
 - Updated to print SE-based confidence
